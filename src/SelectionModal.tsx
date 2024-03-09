@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
-import { SkiAreaList, sortedGroupedSkiAreas } from "./SkiAreas";
+import { SkiAreaList, sortedGroupedSkiAreas, toggleHasSkied } from "./SkiAreas";
 import { TitleBar } from "./TitleBar";
 import { componentStyles, coreStyles } from "./styles";
 
@@ -12,6 +12,7 @@ export const SelectionModal = ({ navigation }: { navigation: any }) => {
       <SkiAreaList
         groupedSkiAreas={sortedGroupedSkiAreas}
         showUnselectedIndicator={true}
+        onPress={toggleHasSkied}
       />
     </View>
   );

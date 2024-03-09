@@ -155,26 +155,39 @@ const styles = StyleSheet.create({
     marginLeft: 5, // Space between the text and icon
   },
   skiedIconFalse: {
-    color: "#FFC107", // Yellow color for the icon, adjust as needed
+    color: "#6e6e72", //gray color for the icon, adjust as needed
     marginLeft: 5, // Space between the text and icon
   },
 });
 
+export const toggleHasSkied = async (
+  skiArea: SkiArea,
+  setHasSkied: React.Dispatch<React.SetStateAction<boolean>>,
+  hasSkied: boolean
+) => {
+  const newHasSkiedValue = !hasSkied;
+  setHasSkied(newHasSkiedValue); // Update the local state
+  await AsyncStorage.setItem(skiArea.name, String(newHasSkiedValue)); // Update AsyncStorage
+};
+
 export const SkiAreaItem = ({
   skiArea,
   showUnselectedIndicator,
+  onPress, // The onPress prop is now optional
 }: {
   skiArea: SkiArea;
   showUnselectedIndicator: boolean;
+  onPress?: (
+    skiArea: SkiArea,
+    setHasSkied: React.Dispatch<React.SetStateAction<boolean>>,
+    hasSkied: boolean
+  ) => void;
 }) => {
-  // State to manage the 'hasSkied' status
   const [hasSkied, setHasSkied] = useState(skiArea.hasSkied);
 
-  // Effect to update the component state based on AsyncStorage
   useEffect(() => {
     const fetchSkiedStatus = async () => {
       const storedHasSkied = await AsyncStorage.getItem(skiArea.name);
-      // Update state if the value from AsyncStorage is different
       if (storedHasSkied !== null && storedHasSkied !== String(hasSkied)) {
         setHasSkied(storedHasSkied === "true");
       }
@@ -183,15 +196,11 @@ export const SkiAreaItem = ({
     fetchSkiedStatus();
   }, [skiArea.name, hasSkied]);
 
-  const handlePress = async () => {
-    // Update the local state
-    setHasSkied(!hasSkied);
-    // Update the AsyncStorage
-    await AsyncStorage.setItem(skiArea.name, String(!hasSkied));
-  };
-
   return (
-    <TouchableOpacity onPress={handlePress}>
+    <TouchableOpacity
+      onPress={() => onPress?.(skiArea, setHasSkied, hasSkied)}
+      activeOpacity={onPress ? 0.2 : 1}
+    >
       <View style={componentStyles.listItem}>
         <Image
           source={logos[skiArea.id as keyof typeof logos] || logos.default}
@@ -241,9 +250,15 @@ const StateHeader = ({ state }: { state: string }) => (
 export function SkiAreaList({
   groupedSkiAreas,
   showUnselectedIndicator = false,
+  onPress,
 }: {
   groupedSkiAreas: GroupedSkiAreas;
-  showUnselectedIndicator?: boolean; // Optional boolean prop
+  showUnselectedIndicator?: boolean;
+  onPress?: (
+    skiArea: SkiArea,
+    setHasSkied: React.Dispatch<React.SetStateAction<boolean>>,
+    hasSkied: boolean
+  ) => void;
 }) {
   return (
     <FlashList
@@ -255,7 +270,7 @@ export function SkiAreaList({
       }) => (
         <View key={country}>
           <CountryHeader country={country} />
-          {Object.entries(states).map(([state, areas]: [string, SkiArea[]]) => (
+          {Object.entries(states).map(([state, areas]) => (
             <View key={state}>
               {country !== state && <StateHeader state={state} />}
               {areas.map((skiArea, index) => (
@@ -263,6 +278,7 @@ export function SkiAreaList({
                   key={index}
                   skiArea={skiArea}
                   showUnselectedIndicator={showUnselectedIndicator}
+                  onPress={onPress} // Pass the onPress function as a prop
                 />
               ))}
             </View>
