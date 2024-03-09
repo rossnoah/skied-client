@@ -7,6 +7,7 @@ import {
   Text,
   View,
   Image,
+  Switch,
 } from "react-native";
 import jsonData from "./skiareas.json";
 import { logos } from "./images";
@@ -65,8 +66,54 @@ function TabTwo() {
 function TabThree() {
   return (
     <View style={styles.container}>
-      <Text>Tab Three</Text>
+      <Settings />
     </View>
+  );
+}
+function Settings() {
+  const [isEnabledNotifications, setIsEnabledNotifications] =
+    React.useState(false);
+  const [isEnabledDarkMode, setIsEnabledDarkMode] = React.useState(false);
+  const [isEnabledLocation, setIsEnabledLocation] = React.useState(false);
+
+  const toggleSwitchNotifications = () =>
+    setIsEnabledNotifications((previousState) => !previousState);
+  const toggleSwitchDarkMode = () =>
+    setIsEnabledDarkMode((previousState) => !previousState);
+  const toggleSwitchLocation = () =>
+    setIsEnabledLocation((previousState) => !previousState);
+
+  return (
+    <ScrollView contentContainerStyle={styles.settingsContainer}>
+      <Text style={styles.settingsHeader}>Settings</Text>
+      <View style={styles.settingsItem}>
+        <Text style={styles.settingsText}>Enable Notifications</Text>
+        <Switch
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={isEnabledNotifications ? "#f5dd4b" : "#f4f3f4"}
+          onValueChange={toggleSwitchNotifications}
+          value={isEnabledNotifications}
+        />
+      </View>
+      <View style={styles.settingsItem}>
+        <Text style={styles.settingsText}>Dark Mode</Text>
+        <Switch
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={isEnabledDarkMode ? "#f5dd4b" : "#f4f3f4"}
+          onValueChange={toggleSwitchDarkMode}
+          value={isEnabledDarkMode}
+        />
+      </View>
+      <View style={styles.settingsItem}>
+        <Text style={styles.settingsText}>Location Services</Text>
+        <Switch
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={isEnabledLocation ? "#f5dd4b" : "#f4f3f4"}
+          onValueChange={toggleSwitchLocation}
+          value={isEnabledLocation}
+        />
+      </View>
+    </ScrollView>
   );
 }
 
@@ -76,9 +123,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="All Mountains" component={HomeScreen} />
         <Tab.Screen name="TabTwo" component={TabTwo} />
-        <Tab.Screen name="TabThree" component={TabThree} />
+        <Tab.Screen name="Settings" component={TabThree} />
       </Tab.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
@@ -118,5 +165,23 @@ const styles = StyleSheet.create({
   detailText: {
     fontSize: 15,
     color: "#6e6e72",
+  },
+  settingsContainer: {
+    padding: 20,
+  },
+  settingsHeader: {
+    fontSize: 22,
+    color: "#1c1c1e",
+    marginBottom: 20,
+  },
+  settingsItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  settingsText: {
+    fontSize: 18,
+    color: "#1c1c1e",
   },
 });
