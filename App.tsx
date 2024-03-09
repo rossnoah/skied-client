@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import jsonData from "./skiareas.json";
 import { logos } from "./images";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 type SkiArea = {
   name: string;
@@ -29,86 +31,92 @@ jsonData.forEach(
   }
 );
 
-export default function App() {
-  //load skiareas.json file and add to skiAreaList
+function HomeScreen() {
+  return (
+    <ScrollView style={styles.scrollView}>
+      {skiAreaList.map((skiArea, index) => (
+        <View key={index} style={styles.listItem}>
+          <Image
+            source={
+              logos[skiArea.name as keyof typeof logos] || logos["default"]
+            }
+            style={styles.logo}
+            resizeMode="contain"
+          />
+          <View style={styles.textContainer}>
+            <Text style={styles.subHeadingStyle}>{skiArea.name}</Text>
+            <Text style={styles.detailText}>{skiArea.state}</Text>
+          </View>
+        </View>
+      ))}
+    </ScrollView>
+  );
+}
 
-  console.log("fetching skiareas.json");
-
+// Placeholder components for other tabs
+function TabTwo() {
   return (
     <View style={styles.container}>
-      <Text>Hello world!</Text>
-      <Button
-        title="Click me"
-        onPress={() => {
-          console.log("hello");
-        }}
-      />
-      <View>
-        <ScrollView>
-          {skiAreaList.map((skiArea, index) => {
-            return (
-              <React.Fragment key={index}>
-                <SkiAreaListItem skiArea={skiArea} />
-              </React.Fragment>
-            );
-          })}
-        </ScrollView>
-      </View>
-
-      <StatusBar style="auto" />
+      <Text>Tab Two</Text>
     </View>
   );
 }
 
-const SkiAreaListItem = (props: { skiArea: SkiArea }) => {
-  const name = props.skiArea.name;
-  const image = logos[name as keyof typeof logos] || logos["default"];
-
-  console.log("image", image);
-
+function TabThree() {
   return (
-    <View style={styles.listContainer}>
-      <Image source={image} style={styles.logo} />
-      <View style={styles.textContainer}>
-        <Text style={styles.subHeadingStyle}>{props.skiArea.name}</Text>
-        <Text style={styles.largeText}>{`, ${props.skiArea.state}`}</Text>
-      </View>
+    <View style={styles.container}>
+      <Text>Tab Three</Text>
     </View>
   );
-};
+}
+
+const Tab = createBottomTabNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="TabTwo" component={TabTwo} />
+        <Tab.Screen name="TabThree" component={TabThree} />
+      </Tab.Navigator>
+      <StatusBar style="auto" />
+    </NavigationContainer>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#f2f2f7",
   },
-  listContainer: {
-    flex: 1,
-    backgroundColor: "#fff",
-    flexDirection: "row", // Make children align horizontally
-    alignItems: "center", // Align children vertically in the center
-    justifyContent: "flex-start", // Align children to the start of the container
+  scrollView: {
+    width: "100%",
   },
-  headingStyle: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  subHeadingStyle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  largeText: {
-    fontSize: 18,
-  },
-  logo: {
-    width: 35,
-    height: 35,
-    marginRight: 10,
-  },
-  textContainer: {
+  listItem: {
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: "#ffffff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#c6c6c8",
+    paddingVertical: 10, // Reduced padding for a bit more compact vertical spacing
+    paddingHorizontal: 15,
+  },
+  logo: {
+    width: 29,
+    height: 29,
+    borderRadius: 29 / 4,
+    marginRight: 15,
+  },
+  textContainer: {
+    justifyContent: "center",
+  },
+  subHeadingStyle: {
+    fontSize: 17,
+    color: "#1c1c1e",
+  },
+  detailText: {
+    fontSize: 15,
+    color: "#6e6e72",
   },
 });
