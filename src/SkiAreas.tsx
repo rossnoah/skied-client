@@ -25,13 +25,22 @@ export type SkiArea = {
   hasSkied: boolean;
 };
 
+type RawSkiArea = {
+  name: string;
+  id: string;
+  country: string;
+  state: string | null;
+};
+
+type RawJsonData = RawSkiArea[];
+
 export type GroupedSkiAreas = {
   [country: string]: {
     [state: string]: SkiArea[];
   };
 };
 
-const rawJsonData = jsonData;
+const rawJsonData: RawJsonData = jsonData;
 const groupedSkiAreas: GroupedSkiAreas = rawJsonData.reduce(
   (acc: GroupedSkiAreas, skiArea) => {
     let { country, state } = skiArea;
@@ -52,7 +61,7 @@ const groupedSkiAreas: GroupedSkiAreas = rawJsonData.reduce(
       name: skiArea.name,
       country: skiArea.country,
       state: skiArea.state || skiArea.country,
-      id: skiArea.name,
+      id: skiArea.id,
       hasSkied: hasSkiedMap.get(skiArea.name) || false,
     };
 
@@ -141,13 +150,23 @@ const styles = StyleSheet.create({
     marginLeft: coreStyles.spacing.xs, // Optional spacing between the ski area name and the "Skied" label
     // Add any additional styling you want for the "Skied" label here
   },
-  skiedIcon: {
+  skiedIconTrue: {
     color: "#4CAF50", // Green color for the icon, adjust as needed
+    marginLeft: 5, // Space between the text and icon
+  },
+  skiedIconFalse: {
+    color: "#FFC107", // Yellow color for the icon, adjust as needed
     marginLeft: 5, // Space between the text and icon
   },
 });
 
-export const SkiAreaItem = ({ skiArea }: { skiArea: SkiArea }) => {
+export const SkiAreaItem = ({
+  skiArea,
+  showUnselectedIndicator,
+}: {
+  skiArea: SkiArea;
+  showUnselectedIndicator: boolean;
+}) => {
   // State to manage the 'hasSkied' status
   const [hasSkied, setHasSkied] = useState(skiArea.hasSkied);
 
@@ -175,7 +194,7 @@ export const SkiAreaItem = ({ skiArea }: { skiArea: SkiArea }) => {
     <TouchableOpacity onPress={handlePress}>
       <View style={componentStyles.listItem}>
         <Image
-          source={logos[skiArea.name as keyof typeof logos] || logos.default}
+          source={logos[skiArea.id as keyof typeof logos] || logos.default}
           style={componentStyles.logo}
           resizeMode="contain"
         />
@@ -195,7 +214,14 @@ export const SkiAreaItem = ({ skiArea }: { skiArea: SkiArea }) => {
             <MaterialIcons
               name="check-circle"
               size={24}
-              style={styles.skiedIcon}
+              style={styles.skiedIconTrue}
+            />
+          )}
+          {!hasSkied && showUnselectedIndicator && (
+            <MaterialIcons
+              name="radio-button-unchecked"
+              size={24}
+              style={styles.skiedIconFalse}
             />
           )}
         </View>
@@ -214,8 +240,10 @@ const StateHeader = ({ state }: { state: string }) => (
 
 export function SkiAreaList({
   groupedSkiAreas,
+  showUnselectedIndicator = false,
 }: {
   groupedSkiAreas: GroupedSkiAreas;
+  showUnselectedIndicator?: boolean; // Optional boolean prop
 }) {
   return (
     <FlashList
@@ -231,7 +259,11 @@ export function SkiAreaList({
             <View key={state}>
               {country !== state && <StateHeader state={state} />}
               {areas.map((skiArea, index) => (
-                <SkiAreaItem key={index} skiArea={skiArea} />
+                <SkiAreaItem
+                  key={index}
+                  skiArea={skiArea}
+                  showUnselectedIndicator={showUnselectedIndicator}
+                />
               ))}
             </View>
           ))}

@@ -13,6 +13,8 @@ import * as SplashScreen from "expo-splash-screen";
 import jsonData from "./skiareas.json";
 import { hasSkiedMap } from "./src/SkiAreas";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createStackNavigator } from "@react-navigation/stack";
+import { SelectionModal } from "./src/SelectionModal";
 
 // Placeholder components for other tabs
 function TabOne() {
@@ -32,6 +34,87 @@ function TabThree() {
   );
 }
 const Tab = createBottomTabNavigator();
+const RootStack = createStackNavigator();
+
+function TabNavigator() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen
+        name="My Mountains"
+        component={TabOne}
+        options={{
+          headerShown: false, // This line removes the default header
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome6 name="location-dot" size={size * 0.9} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="All Mountains"
+        component={AllMountains}
+        options={{
+          headerShown: false, // This line removes the default header
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome6 name="mountain-sun" size={size * 0.8} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="US Mountains"
+        component={USMountains}
+        options={{
+          headerShown: false, // This line removes the default header
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome6 name="flag-usa" size={size * 0.9} color={color} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Compare"
+        component={USMountains}
+        options={{
+          headerShown: false, // This line removes the default header
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome6 name="code-compare" size={size * 0.9} color={color} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Settings"
+        component={TabThree}
+        options={{
+          headerShown: true, // This line removes the default header
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome6 name="gear" size={size * 0.9} color={color} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+function RootStackScreen() {
+  return (
+    <RootStack.Navigator>
+      <RootStack.Screen
+        name="Main"
+        component={TabNavigator}
+        options={{ headerShown: false }}
+      />
+      {/* Make the modal slide in from the bottom */}
+      <RootStack.Screen
+        name="Demo"
+        component={SelectionModal}
+        options={{
+          headerShown: false,
+          presentation: "modal",
+        }}
+      />
+    </RootStack.Navigator>
+  );
+}
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -76,57 +159,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="Your Mountains"
-          component={TabOne}
-          options={{
-            headerShown: false, // This line removes the default header
-            tabBarIcon: ({ color, size }) => (
-              <FontAwesome6
-                name="location-dot"
-                size={size * 0.9}
-                color={color}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="All Mountains"
-          component={AllMountains}
-          options={{
-            headerShown: false, // This line removes the default header
-            tabBarIcon: ({ color, size }) => (
-              <FontAwesome6
-                name="mountain-sun"
-                size={size * 0.8}
-                color={color}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="US Mountains"
-          component={USMountains}
-          options={{
-            headerShown: false, // This line removes the default header
-            tabBarIcon: ({ color, size }) => (
-              <FontAwesome6 name="flag-usa" size={size * 0.9} color={color} />
-            ),
-          }}
-        />
-
-        <Tab.Screen
-          name="Settings"
-          component={TabThree}
-          options={{
-            headerShown: true, // This line removes the default header
-            tabBarIcon: ({ color, size }) => (
-              <FontAwesome6 name="gear" size={size * 0.9} color={color} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
+      <RootStackScreen />
       <StatusBar style="auto" />
     </NavigationContainer>
   );

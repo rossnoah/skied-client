@@ -2,6 +2,7 @@ import React from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { coreStyles } from "./styles";
+import { useNavigation } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
   header: {
@@ -32,11 +33,16 @@ const styles = StyleSheet.create({
 });
 
 export const TitleBar = () => {
+  const navigation = useNavigation(); // Use the useNavigation hook to get access to navigation
+
   return (
     <View style={styles.header}>
       <TouchableOpacity
         style={styles.headerButton}
-        onPress={() => console.log("plus")}
+        onPress={() => {
+          console.log("plus");
+          navigation.navigate("Demo" as never); // Update the navigation options to be an object instead of an array
+        }}
       >
         <Feather name="plus" size={24} color={coreStyles.colors.primaryText} />
       </TouchableOpacity>
