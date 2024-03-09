@@ -29,7 +29,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="All Mountains" component={HomeScreen} />
+        <Tab.Screen
+          name="All Mountains"
+          component={HomeScreen}
+          options={{ headerShown: false }} // This line removes the default header
+        />
         <Tab.Screen name="TabTwo" component={TabTwo} />
         <Tab.Screen name="Settings" component={TabThree} />
       </Tab.Navigator>

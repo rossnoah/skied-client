@@ -12,7 +12,12 @@ export const coreStyles = {
     xs: 10,
     sm: 15,
     md: 20,
-    lg: 29, // Specific case for logo dimensions
+    lg: 29,
+    xl: 35,
+    xl2: 40,
+    xl3: 48,
+    xl4: 56,
+    xl5: 64,
   },
   typography: {
     subHeading: { fontSize: 17, color: "#1c1c1e" },
