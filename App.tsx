@@ -4,17 +4,18 @@ import { Button, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Settings } from "./src/Settings";
-import { HomeScreen } from "./src/HomeScreen";
+import { AllMountains } from "./src/AllMountains";
 import { componentStyles } from "./src/styles";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { TitleBar } from "./src/TitleBar";
+import { USMountains } from "./src/USMountains";
 
 // Placeholder components for other tabs
-function TabTwo() {
+function TabOne() {
   return (
     <View style={componentStyles.container}>
       <TitleBar />
-      <Text>Tab Two</Text>
+      <Text>Tab One</Text>
     </View>
   );
 }
@@ -33,8 +34,22 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen
+          name="Your Mountains"
+          component={TabOne}
+          options={{
+            headerShown: false, // This line removes the default header
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome6
+                name="location-dot"
+                size={size * 0.9}
+                color={color}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
           name="All Mountains"
-          component={HomeScreen}
+          component={AllMountains}
           options={{
             headerShown: false, // This line removes the default header
             tabBarIcon: ({ color, size }) => (
@@ -47,8 +62,8 @@ export default function App() {
           }}
         />
         <Tab.Screen
-          name="US Resorts"
-          component={TabTwo}
+          name="US Mountains"
+          component={USMountains}
           options={{
             headerShown: false, // This line removes the default header
             tabBarIcon: ({ color, size }) => (
@@ -56,6 +71,7 @@ export default function App() {
             ),
           }}
         />
+
         <Tab.Screen
           name="Settings"
           component={TabThree}
