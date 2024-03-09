@@ -1,5 +1,6 @@
 import React from "react";
-import { ScrollView, Text, View, Switch } from "react-native";
+import { ScrollView, Text, View, Switch, Button } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { componentStyles } from "./styles";
 
 export function Settings() {
@@ -15,14 +16,18 @@ export function Settings() {
   const toggleSwitchLocation = () =>
     setIsEnabledLocation((previousState) => !previousState);
 
-  const trackColors: { false: string; true: string } = {
-    false: "#DDDDE2",
-    true: "#2ECF57",
-  };
+  const trackColors = { false: "#DDDDE2", true: "#2ECF57" };
+  const thumbColors = { false: "#f4f3f4", true: "#f4f3f4" };
 
-  const thumbColors: { false: string; true: string } = {
-    false: "#f4f3f4",
-    true: "#f4f3f4",
+  // Function to clear all data from AsyncStorage
+  const clearStorage = async () => {
+    try {
+      await AsyncStorage.clear();
+      alert("Storage successfully cleared!");
+    } catch (e) {
+      // clearing error
+      alert("Failed to clear the async storage.");
+    }
   };
 
   return (
@@ -56,6 +61,7 @@ export function Settings() {
           value={isEnabledLocation}
         />
       </View>
+      <Button title="Clear Storage" onPress={clearStorage} />
     </ScrollView>
   );
 }

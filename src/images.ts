@@ -29,6 +29,12 @@ import Homewood from "../assets/logos/Homewood.jpeg";
 import Kirkwood from "../assets/logos/Kirkwood.png";
 import Northstar from "../assets/logos/Northstar.jpeg";
 import TahoeDonner from "../assets/logos/TahoeDonner.jpeg";
+import Zermatt from "../assets/logos/Zermatt.jpeg";
+import Verbier from "../assets/logos/Verbier.jpg";
+import StMoritz from "../assets/logos/StMoritz.png";
+import Megeve from "../assets/logos/Megeve.jpeg";
+import Chamonix from "../assets/logos/Chamonix.png";
+import Kitzbuhel from "../assets/logos/Kitzbuhel.png";
 
 // Mapping ski area names to logos
 export const logos = {
@@ -62,6 +68,12 @@ export const logos = {
   Kirkwood: Kirkwood,
   "Northstar at Tahoe": Northstar,
   "Tahoe Donner": TahoeDonner,
+  Zermatt: Zermatt,
+  Verbier: Verbier,
+  "St. Moritz": StMoritz,
+  "Meg\u00e8ve": Megeve,
+  Chamonix: Chamonix,
+  Kitzbuhel: Kitzbuhel,
 
   // Add more mappings as needed
 };

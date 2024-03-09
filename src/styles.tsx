@@ -3,12 +3,16 @@ import { StyleSheet } from "react-native";
 export const coreStyles = {
   colors: {
     background: "#f2f2f7",
+    darkerBackground: "#e5e5ea",
     white: "#ffffff",
     border: "#c6c6c8",
     primaryText: "#1c1c1e",
     secondaryText: "#6e6e72",
+    accent: "#DDEFFF",
   },
   spacing: {
+    xs3: 4,
+    xs2: 6,
     xs: 10,
     sm: 15,
     md: 20,
