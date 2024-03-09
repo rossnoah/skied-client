@@ -1,0 +1,178 @@
+[
+  { "name": "Arapahoe Basin", "country": "United States", "state": "Colorado" },
+  { "name": "Aspen Snowmass", "country": "United States", "state": "Colorado" },
+  { "name": "Beaver Creek", "country": "United States", "state": "Colorado" },
+  { "name": "Breckenridge", "country": "United States", "state": "Colorado" },
+  {
+    "name": "Copper Mountain",
+    "country": "United States",
+    "state": "Colorado"
+  },
+  { "name": "Crested Butte", "country": "United States", "state": "Colorado" },
+  { "name": "Echo Mountain", "country": "United States", "state": "Colorado" },
+  { "name": "Eldora", "country": "United States", "state": "Colorado" },
+  {
+    "name": "Hesperus Ski Area",
+    "country": "United States",
+    "state": "Colorado"
+  },
+  { "name": "Howelsen Hill", "country": "United States", "state": "Colorado" },
+  {
+    "name": "Kendall Mountain",
+    "country": "United States",
+    "state": "Colorado"
+  },
+  { "name": "Keystone", "country": "United States", "state": "Colorado" },
+  { "name": "Loveland", "country": "United States", "state": "Colorado" },
+  {
+    "name": "Monarch Mountain",
+    "country": "United States",
+    "state": "Colorado"
+  },
+  {
+    "name": "Powderhorn Resort",
+    "country": "United States",
+    "state": "Colorado"
+  },
+  {
+    "name": "Purgatory Resort",
+    "country": "United States",
+    "state": "Colorado"
+  },
+  {
+    "name": "Silverton Mountain",
+    "country": "United States",
+    "state": "Colorado"
+  },
+  { "name": "Ski Cooper", "country": "United States", "state": "Colorado" },
+  {
+    "name": "Ski Granby Ranch",
+    "country": "United States",
+    "state": "Colorado"
+  },
+  { "name": "Steamboat", "country": "United States", "state": "Colorado" },
+  { "name": "Sunlight", "country": "United States", "state": "Colorado" },
+  { "name": "Telluride", "country": "United States", "state": "Colorado" },
+  { "name": "Vail", "country": "United States", "state": "Colorado" },
+  {
+    "name": "Winter Park/Mary Jane",
+    "country": "United States",
+    "state": "Colorado"
+  },
+  { "name": "Wolf Creek", "country": "United States", "state": "Colorado" },
+  { "name": "Alta", "country": "United States", "state": "Utah" },
+  { "name": "Beaver Mountain", "country": "United States", "state": "Utah" },
+  { "name": "Brian Head", "country": "United States", "state": "Utah" },
+  { "name": "Brighton", "country": "United States", "state": "Utah" },
+  { "name": "Canyons", "country": "United States", "state": "Utah" },
+  { "name": "Cherry Peak", "country": "United States", "state": "Utah" },
+  { "name": "Deer Valley", "country": "United States", "state": "Utah" },
+  { "name": "Elk Mountain", "country": "United States", "state": "Utah" },
+  { "name": "Nordic Valley", "country": "United States", "state": "Utah" },
+  { "name": "Park City Mountain", "country": "United States", "state": "Utah" },
+  { "name": "Powder Mountain", "country": "United States", "state": "Utah" },
+  { "name": "Snowbasin", "country": "United States", "state": "Utah" },
+  { "name": "Snowbird", "country": "United States", "state": "Utah" },
+  { "name": "Soldier Hollow", "country": "United States", "state": "Utah" },
+  { "name": "Solitude", "country": "United States", "state": "Utah" },
+  { "name": "Sundance", "country": "United States", "state": "Utah" },
+  {
+    "name": "Palisades Tahoe",
+    "country": "United States",
+    "state": "California"
+  },
+  {
+    "name": "Mammoth Mountain",
+    "country": "United States",
+    "state": "California"
+  },
+  {
+    "name": "Heavenly Mountain Resort",
+    "country": "United States",
+    "state": "California"
+  },
+  {
+    "name": "Mount Shasta Ski Park",
+    "country": "United States",
+    "state": "California"
+  },
+  {
+    "name": "Alpine Meadows",
+    "country": "United States",
+    "state": "California"
+  },
+  { "name": "Boreal", "country": "United States", "state": "California" },
+  {
+    "name": "Donner Ski Ranch",
+    "country": "United States",
+    "state": "California"
+  },
+  { "name": "Homewood", "country": "United States", "state": "California" },
+  { "name": "Kirkwood", "country": "United States", "state": "California" },
+  {
+    "name": "Northstar at Tahoe",
+    "country": "United States",
+    "state": "California"
+  },
+  {
+    "name": "Sierra-at-Tahoe",
+    "country": "United States",
+    "state": "California"
+  },
+  { "name": "Sugar Bowl", "country": "United States", "state": "California" },
+  { "name": "Soda Springs", "country": "United States", "state": "California" },
+  { "name": "Tahoe Donner", "country": "United States", "state": "California" },
+  { "name": "Bear Valley", "country": "United States", "state": "California" },
+  { "name": "Dodge Ridge", "country": "United States", "state": "California" },
+  {
+    "name": "June Mountain",
+    "country": "United States",
+    "state": "California"
+  },
+  { "name": "China Peak", "country": "United States", "state": "California" },
+  { "name": "Alta Sierra", "country": "United States", "state": "California" },
+  {
+    "name": "Buckhorn Ski and Snowboard Club",
+    "country": "United States",
+    "state": "California"
+  },
+  {
+    "name": "Bear Mountain",
+    "country": "United States",
+    "state": "California"
+  },
+  { "name": "Badger Pass", "country": "United States", "state": "California" },
+  { "name": "Kratka Ridge", "country": "United States", "state": "California" },
+  {
+    "name": "Mount Baldy Ski Lifts",
+    "country": "United States",
+    "state": "California"
+  },
+  {
+    "name": "Mount Waterman",
+    "country": "United States",
+    "state": "California"
+  },
+  {
+    "name": "Mountain High",
+    "country": "United States",
+    "state": "California"
+  },
+  { "name": "Snow Summit", "country": "United States", "state": "California" },
+  {
+    "name": "Snow Valley Mountain Resort",
+    "country": "United States",
+    "state": "California"
+  },
+  {
+    "name": "Cedar Pass Ski Area",
+    "country": "United States",
+    "state": "California"
+  },
+  { "name": "Zermatt", "country": "Switzerland", "state": null },
+  { "name": "St. Moritz", "country": "Switzerland", "state": null },
+  { "name": "Verbier", "country": "Switzerland", "state": null },
+  { "name": "Chamonix", "country": "France", "state": null },
+  { "name": "Meg\u00e8ve", "country": "France", "state": null },
+  { "name": "Kitzbuhel", "country": "Austria", "state": null }
+]
