@@ -15,6 +15,9 @@ import { logos } from "./images";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GroupedSkiAreas, SkiArea, useSkiAreasStore } from "./SkiAreaStore";
+import * as Haptics from "expo-haptics";
+import { opacity } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
+import { filterToHasSkied, filterToUSA } from "./filters";
 
 export type RawSkiArea = {
   name: string;
@@ -86,27 +89,56 @@ const styles = StyleSheet.create({
 export const SkiAreaItem = ({
   skiArea,
   showUnselectedIndicator,
-  allowToggle = false, // The onPress prop is now optional
+  allowPress: allowToggle = false, // The onPress prop is now optional
+  allowLongPress: allowLongPress = false, // The onLongPress prop is now optional
 }: {
   skiArea: SkiArea;
   showUnselectedIndicator: boolean;
-  allowToggle: boolean;
+  allowPress: boolean;
+  allowLongPress: boolean;
 }) => {
   const data = useSkiAreasStore(
     (state) => state.groupedSkiAreas[skiArea.country][skiArea.state][skiArea.id]
   );
-
   const toggle = useSkiAreasStore.getState().toggleHasSkied;
+
+  const [opacity, setOpacity] = useState(1); // Default opacity is 1
+
+  const toggleOnPressFunction = async () => {
+    if (allowToggle) {
+      const newStatus = toggle(data);
+      await AsyncStorage.setItem(data.id, newStatus.toString());
+    }
+  };
+
+  const toggleOnLongPressFunction = async () => {
+    if (allowLongPress) {
+      setOpacity(0.2); // Dim the opacity on long press
+      const newStatus = toggle(data);
+      await AsyncStorage.setItem(data.id, newStatus.toString());
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+  };
+
+  const handlePressOut = () => {
+    setOpacity(1); // Reset opacity to 1 when the press is released
+  };
+
+  const handlePressIn = () => {
+    if (!allowToggle && allowLongPress) {
+      setOpacity(0.2); // Dim the opacity when the press is active
+    }
+  };
 
   return (
     <TouchableOpacity
-      onPress={async () => {
-        if (allowToggle) {
-          const newStatus = toggle(data);
-          await AsyncStorage.setItem(data.id, newStatus.toString());
-        }
-      }}
+      onPress={toggleOnPressFunction}
+      onLongPress={toggleOnLongPressFunction}
+      onPressOut={handlePressOut}
+      onPressIn={handlePressIn}
+      delayLongPress={150}
       activeOpacity={allowToggle ? 0.2 : 1}
+      style={{ opacity: opacity }} // Apply dynamic opacity here
     >
       <View style={componentStyles.listItem}>
         <Image
@@ -155,29 +187,26 @@ const StateHeader = ({ state }: { state: string }) => (
 );
 
 export function SkiAreaList({
-  groupedSkiAreas,
   showUnselectedIndicator = false,
-  allowToggle = false,
+  allowPress: allowPress = false,
+  allowLongPress: allowLongPress = false,
   onlyUnitedStates = false,
+  onlyHasSkied = false,
 }: {
-  groupedSkiAreas: GroupedSkiAreas;
   showUnselectedIndicator?: boolean;
-  allowToggle?: boolean;
+  allowPress?: boolean;
+  allowLongPress?: boolean;
   onlyUnitedStates?: boolean;
+  onlyHasSkied?: boolean;
 }) {
+  let groupedSkiAreas = useSkiAreasStore((state) => state.groupedSkiAreas);
+
   if (onlyUnitedStates) {
-    groupedSkiAreas = Object.entries(groupedSkiAreas).reduce(
-      (
-        acc: Record<string, Record<string, Record<string, SkiArea>>>,
-        [country, states]
-      ) => {
-        if (country === "United States") {
-          acc[country] = states;
-        }
-        return acc;
-      },
-      {}
-    );
+    groupedSkiAreas = filterToUSA(groupedSkiAreas);
+  }
+
+  if (onlyHasSkied) {
+    groupedSkiAreas = filterToHasSkied(groupedSkiAreas);
   }
 
   return (
@@ -198,7 +227,8 @@ export function SkiAreaList({
                   key={id}
                   skiArea={skiArea}
                   showUnselectedIndicator={showUnselectedIndicator}
-                  allowToggle={allowToggle} // Pass the onPress function as a prop
+                  allowPress={allowPress} // Pass the onPress function as a prop
+                  allowLongPress={allowLongPress}
                 />
               ))}
             </View>

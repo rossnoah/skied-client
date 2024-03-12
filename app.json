@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "dev.noah.skied"
@@ -29,6 +31,9 @@
       "eas": {
         "projectId": "829aa11d-85a6-4e50-ba68-4062c3d60e89"
       }
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }

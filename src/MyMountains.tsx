@@ -2,16 +2,12 @@ import React from "react";
 import { Text, View } from "react-native";
 import { componentStyles } from "./styles";
 import { TitleBar } from "./TitleBar";
-// import { GroupedSkiAreas } from "./SkiAreaStore";
+import { SkiAreaList } from "./SkiAreas";
+import { useSkiAreasStore } from "./SkiAreaStore";
 
-// Placeholder components for other tabs
-export function MyMountains() {
-  return (
-    <View style={componentStyles.container}>
-      <TitleBar />
-      {/* <SkiAreaList
-        groupedSkiAreas={filterToMyMountains(sortedGroupedSkiAreas)}
-      /> */}
-    </View>
-  );
-}
+export const MyMountains: React.FC = () => (
+  <View style={componentStyles.container}>
+    <TitleBar />
+    <SkiAreaList onlyHasSkied={true} />
+  </View>
+);

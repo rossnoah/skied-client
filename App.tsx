@@ -16,6 +16,10 @@ import { SelectionModal } from "./src/SelectionModal";
 import { MyMountains } from "./src/MyMountains";
 import { useSkiAreasStore } from "./src/SkiAreaStore";
 
+/*
+TODO: ENABLE HAPTICS PERMISSION ON ANDROID
+*/
+
 function TabThree() {
   return (
     <View style={componentStyles.container}>

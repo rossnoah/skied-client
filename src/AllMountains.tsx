@@ -9,8 +9,6 @@ import { useSkiAreasStore } from "./SkiAreaStore";
 export const AllMountains: React.FC = () => (
   <View style={componentStyles.container}>
     <TitleBar />
-    <SkiAreaList
-      groupedSkiAreas={useSkiAreasStore.getState().groupedSkiAreas}
-    />
+    <SkiAreaList allowLongPress={true} />
   </View>
 );

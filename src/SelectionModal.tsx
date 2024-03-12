@@ -39,9 +39,9 @@ export const SelectionModal = ({ navigation }: { navigation: any }) => {
       </View>
 
       <SkiAreaList
-        groupedSkiAreas={useSkiAreasStore.getState().groupedSkiAreas}
         showUnselectedIndicator={true}
-        allowToggle={true}
+        allowPress={true}
+        allowLongPress={true}
       />
     </View>
   );

@@ -9,10 +9,7 @@ export const USMountains: React.FC = () => {
   return (
     <View style={componentStyles.container}>
       <TitleBar />
-      <SkiAreaList
-        groupedSkiAreas={useSkiAreasStore.getState().groupedSkiAreas}
-        onlyUnitedStates={true}
-      />
+      <SkiAreaList onlyUnitedStates={true} allowLongPress={true} />
     </View>
   );
 };
