@@ -18,6 +18,7 @@ import { GroupedSkiAreas, SkiArea, useSkiAreasStore } from "./SkiAreaStore";
 import * as Haptics from "expo-haptics";
 import { opacity } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
 import { filterToHasSkied, filterToUSA } from "./filters";
+import { useShallow } from "zustand/react/shallow";
 
 export type RawSkiArea = {
   name: string;
@@ -86,97 +87,102 @@ const styles = StyleSheet.create({
   },
 });
 
-export const SkiAreaItem = ({
-  skiArea,
-  showUnselectedIndicator,
-  allowPress: allowToggle = false, // The onPress prop is now optional
-  allowLongPress: allowLongPress = false, // The onLongPress prop is now optional
-}: {
-  skiArea: SkiArea;
-  showUnselectedIndicator: boolean;
-  allowPress: boolean;
-  allowLongPress: boolean;
-}) => {
-  const data = useSkiAreasStore(
-    (state) => state.groupedSkiAreas[skiArea.country][skiArea.state][skiArea.id]
-  );
-  const toggle = useSkiAreasStore.getState().toggleHasSkied;
+export const SkiAreaItem = React.memo(
+  ({
+    skiArea,
+    showUnselectedIndicator,
+    allowPress: allowToggle = false, // The onPress prop is now optional
+    allowLongPress: allowLongPress = false, // The onLongPress prop is now optional
+  }: {
+    skiArea: SkiArea;
+    showUnselectedIndicator: boolean;
+    allowPress: boolean;
+    allowLongPress: boolean;
+  }) => {
+    const data = useSkiAreasStore(
+      useShallow(
+        (state) =>
+          state.groupedSkiAreas[skiArea.country][skiArea.state][skiArea.id]
+      )
+    );
+    const toggle = useSkiAreasStore.getState().toggleHasSkied;
 
-  const [opacity, setOpacity] = useState(1); // Default opacity is 1
+    const [opacity, setOpacity] = useState(1); // Default opacity is 1
 
-  const toggleOnPressFunction = async () => {
-    if (allowToggle) {
-      const newStatus = toggle(data);
-      await AsyncStorage.setItem(data.id, newStatus.toString());
-    }
-  };
+    const toggleOnPressFunction = async () => {
+      if (allowToggle) {
+        const newStatus = toggle(data);
+        await AsyncStorage.setItem(data.id, newStatus.toString());
+      }
+    };
 
-  const toggleOnLongPressFunction = async () => {
-    if (allowLongPress) {
-      setOpacity(0.2); // Dim the opacity on long press
-      const newStatus = toggle(data);
-      await AsyncStorage.setItem(data.id, newStatus.toString());
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    }
-  };
+    const toggleOnLongPressFunction = async () => {
+      if (allowLongPress) {
+        setOpacity(0.2); // Dim the opacity on long press
+        const newStatus = toggle(data);
+        await AsyncStorage.setItem(data.id, newStatus.toString());
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      }
+    };
 
-  const handlePressOut = () => {
-    setOpacity(1); // Reset opacity to 1 when the press is released
-  };
+    const handlePressOut = () => {
+      setOpacity(1); // Reset opacity to 1 when the press is released
+    };
 
-  const handlePressIn = () => {
-    if (!allowToggle && allowLongPress) {
-      setOpacity(0.2); // Dim the opacity when the press is active
-    }
-  };
+    const handlePressIn = () => {
+      if (!allowToggle && allowLongPress) {
+        setOpacity(0.2); // Dim the opacity when the press is active
+      }
+    };
 
-  return (
-    <TouchableOpacity
-      onPress={toggleOnPressFunction}
-      onLongPress={toggleOnLongPressFunction}
-      onPressOut={handlePressOut}
-      onPressIn={handlePressIn}
-      delayLongPress={150}
-      activeOpacity={allowToggle ? 0.2 : 1}
-      style={{ opacity: opacity }} // Apply dynamic opacity here
-    >
-      <View style={componentStyles.listItem}>
-        <Image
-          source={logos[data.id as keyof typeof logos] || logos.default}
-          style={componentStyles.logo}
-          resizeMode="contain"
-        />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flex: 1,
-          }}
-        >
-          <View style={componentStyles.textContainer}>
-            <Text style={componentStyles.subHeadingStyle}>{data.name}</Text>
-            <Text style={componentStyles.detailText}>{data.state}</Text>
+    return (
+      <TouchableOpacity
+        onPress={toggleOnPressFunction}
+        onLongPress={toggleOnLongPressFunction}
+        onPressOut={handlePressOut}
+        onPressIn={handlePressIn}
+        delayLongPress={150}
+        activeOpacity={allowToggle ? 0.2 : 1}
+        style={{ opacity: opacity }} // Apply dynamic opacity here
+      >
+        <View style={componentStyles.listItem}>
+          <Image
+            source={logos[data.id as keyof typeof logos] || logos.default}
+            style={componentStyles.logo}
+            resizeMode="contain"
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flex: 1,
+            }}
+          >
+            <View style={componentStyles.textContainer}>
+              <Text style={componentStyles.subHeadingStyle}>{data.name}</Text>
+              <Text style={componentStyles.detailText}>{data.state}</Text>
+            </View>
+            {data.hasSkied && (
+              <MaterialIcons
+                name="check-circle"
+                size={24}
+                style={styles.skiedIconTrue}
+              />
+            )}
+            {!data.hasSkied && showUnselectedIndicator && (
+              <MaterialIcons
+                name="radio-button-unchecked"
+                size={24}
+                style={styles.skiedIconFalse}
+              />
+            )}
           </View>
-          {data.hasSkied && (
-            <MaterialIcons
-              name="check-circle"
-              size={24}
-              style={styles.skiedIconTrue}
-            />
-          )}
-          {!data.hasSkied && showUnselectedIndicator && (
-            <MaterialIcons
-              name="radio-button-unchecked"
-              size={24}
-              style={styles.skiedIconFalse}
-            />
-          )}
         </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
+      </TouchableOpacity>
+    );
+  }
+);
 
 const CountryHeader = ({ country }: { country: string }) => (
   <Text style={styles.countryHeader}>{country}</Text>
@@ -186,7 +192,7 @@ const StateHeader = ({ state }: { state: string }) => (
   <Text style={styles.stateHeader}>{state}</Text>
 );
 
-export function SkiAreaList({
+export const SkiAreaList = ({
   showUnselectedIndicator = false,
   allowPress: allowPress = false,
   allowLongPress: allowLongPress = false,
@@ -198,7 +204,7 @@ export function SkiAreaList({
   allowLongPress?: boolean;
   onlyUnitedStates?: boolean;
   onlyHasSkied?: boolean;
-}) {
+}) => {
   let groupedSkiAreas = useSkiAreasStore((state) => state.groupedSkiAreas);
 
   if (onlyUnitedStates) {
@@ -238,4 +244,4 @@ export function SkiAreaList({
       estimatedItemSize={100}
     />
   );
-}
+};

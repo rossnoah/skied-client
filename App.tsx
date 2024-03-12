@@ -15,6 +15,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { SelectionModal } from "./src/SelectionModal";
 import { MyMountains } from "./src/MyMountains";
 import { useSkiAreasStore } from "./src/SkiAreaStore";
+import { Text } from "react-native";
 
 /*
 TODO: ENABLE HAPTICS PERMISSION ON ANDROID
@@ -27,6 +28,15 @@ function TabThree() {
     </View>
   );
 }
+
+function Compare() {
+  return (
+    <View style={componentStyles.container}>
+      <Text>Compare</Text>
+    </View>
+  );
+}
+
 const Tab = createBottomTabNavigator();
 const RootStack = createStackNavigator();
 
@@ -66,7 +76,7 @@ function TabNavigator() {
 
       <Tab.Screen
         name="Compare"
-        component={USMountains}
+        component={Compare}
         options={{
           headerShown: false, // This line removes the default header
           tabBarIcon: ({ color, size }) => (

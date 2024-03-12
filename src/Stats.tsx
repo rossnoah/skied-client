@@ -38,7 +38,6 @@ export const StatsBox: React.FC = () => {
   const totalSkiAreas = countTotalSkiAreas(groupedSkiAreas);
   const totalHasSkied = countHasSkiedSkiAreas(groupedSkiAreas);
 
-  console.log("groupedSkiAreas", groupedSkiAreas);
   return (
     <View style={styles.container}>
       <Text style={styles.statsText}>
