@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 28, // Example size, adjust as needed
     color: coreStyles.colors.primaryText, // Using the primary text color from core styles
-    // Add any additional text styling you need here
     fontWeight: "200",
   },
 });

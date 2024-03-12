@@ -137,7 +137,7 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-        loadFromAsyncStorage();
+        await loadFromAsyncStorage();
       } catch (e) {
         console.warn(e);
       } finally {
