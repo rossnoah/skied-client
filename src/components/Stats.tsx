@@ -1,42 +1,13 @@
 import React from "react";
 import { Text, View } from "react-native";
-import { componentStyles } from "./styles";
-import { TitleBar } from "./TitleBar";
-import { SkiAreaList } from "./SkiAreas";
-import { GroupedSkiAreas, useSkiAreasStore } from "./SkiAreaStore";
+import { GroupedSkiAreas, useSkiAreasStore } from "../SkiAreaStore";
 import { StyleSheet } from "react-native";
-
-function countTotalSkiAreas(groupedSkiAreas: GroupedSkiAreas): number {
-  let total = 0;
-  //loop over countries, then states, then count ski areas
-  for (const [country, states] of Object.entries(groupedSkiAreas)) {
-    for (const [state, areas] of Object.entries(states)) {
-      total += Object.keys(areas).length;
-    }
-  }
-  return total;
-}
-
-function countHasSkiedSkiAreas(groupedSkiAreas: GroupedSkiAreas): number {
-  let total = 0;
-  //loop over countries, then states, then count ski areas
-  for (const [country, states] of Object.entries(groupedSkiAreas)) {
-    for (const [state, areas] of Object.entries(states)) {
-      for (const [id, skiArea] of Object.entries(areas)) {
-        if (skiArea.hasSkied) {
-          total++;
-        }
-      }
-    }
-  }
-  return total;
-}
 
 export const StatsBox: React.FC = () => {
   const groupedSkiAreas = useSkiAreasStore((state) => state.groupedSkiAreas);
 
-  const totalSkiAreas = countTotalSkiAreas(groupedSkiAreas);
-  const totalHasSkied = countHasSkiedSkiAreas(groupedSkiAreas);
+  const totalSkiAreas = useSkiAreasStore((state) => state.totalSkiAreas);
+  const totalHasSkied = useSkiAreasStore((state) => state.totalHasSkied);
 
   return (
     <View style={styles.container}>

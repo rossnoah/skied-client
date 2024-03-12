@@ -1,7 +1,7 @@
 import React from "react";
 import { ScrollView, Text, View, Switch, Button } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { componentStyles } from "./styles";
+import { componentStyles } from "../../styles";
 
 export function Settings() {
   const [isEnabledNotifications, setIsEnabledNotifications] =

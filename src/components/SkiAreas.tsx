@@ -1,23 +1,13 @@
-import React, { useEffect, useState } from "react";
-import {
-  ScrollView,
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
-import jsonData from "../skiareas.json";
-import { componentStyles, coreStyles } from "./styles";
-import { TitleBar } from "./TitleBar";
+import React, { useState } from "react";
+import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { componentStyles, coreStyles } from "../styles";
 import { FlashList } from "@shopify/flash-list";
-import { logos } from "./images";
+import { logos } from "../images";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { GroupedSkiAreas, SkiArea, useSkiAreasStore } from "./SkiAreaStore";
+import { SkiArea, useSkiAreasStore } from "../SkiAreaStore";
 import * as Haptics from "expo-haptics";
-import { opacity } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
-import { filterToHasSkied, filterToUSA } from "./filters";
+import { filterToHasSkied, filterToUSA } from "../filters";
 import { useShallow } from "zustand/react/shallow";
 
 export type RawSkiArea = {

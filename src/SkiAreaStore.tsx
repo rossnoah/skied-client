@@ -46,6 +46,8 @@ const demoData: GroupedSkiAreas = {
 // Define the store interface including the data and all utility functions
 interface SkiAreasStore {
   groupedSkiAreas: GroupedSkiAreas;
+  totalSkiAreas: number;
+  totalHasSkied: number;
   addSkiArea: (skiArea: SkiArea) => void;
   toggleHasSkied: (skiArea: SkiArea) => boolean;
 }
@@ -53,6 +55,8 @@ interface SkiAreasStore {
 // Create the Zustand store
 export const useSkiAreasStore = create<SkiAreasStore>((set, get) => ({
   groupedSkiAreas: {},
+  totalSkiAreas: 0,
+  totalHasSkied: 0,
   addSkiArea: (skiArea: SkiArea) => {
     set(
       produce((state: SkiAreasStore) => {
@@ -66,6 +70,17 @@ export const useSkiAreasStore = create<SkiAreasStore>((set, get) => ({
           state.groupedSkiAreas[skiArea.country][skiArea.state] = {} as {
             [id: string]: SkiArea;
           };
+        }
+
+        // Add the ski area to the state, increment totalSkiAreas counter
+        if (
+          !state.groupedSkiAreas[skiArea.country][skiArea.state][skiArea.id]
+        ) {
+          state.totalSkiAreas += 1; // Increment only if the ski area is new
+
+          if (skiArea.hasSkied) {
+            state.totalHasSkied += 1; // Increment only if the ski area is new and hasSkied
+          }
         }
 
         // Add the ski area to the state
@@ -121,6 +136,12 @@ export const useSkiAreasStore = create<SkiAreasStore>((set, get) => ({
           // Toggle the hasSkied property
           draft.groupedSkiAreas[country][state][id].hasSkied =
             !draft.groupedSkiAreas[country][state][id].hasSkied;
+
+          // Increment or decrement totalHasSkied based on the new value of hasSkied
+          draft.totalHasSkied += draft.groupedSkiAreas[country][state][id]
+            .hasSkied
+            ? 1
+            : -1;
         }
       })
     );

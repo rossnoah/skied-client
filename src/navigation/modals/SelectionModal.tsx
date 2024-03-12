@@ -1,10 +1,7 @@
 import React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
-// import { SkiAreaList, toggleHasSkied } from "./SkiAreas";
-import { TitleBar } from "./TitleBar";
-import { componentStyles, coreStyles } from "./styles";
-import { SkiAreaList } from "./SkiAreas";
-import { useSkiAreasStore } from "./SkiAreaStore";
+import { View, Text, StyleSheet } from "react-native";
+import { componentStyles, coreStyles } from "../../styles";
+import { SkiAreaList } from "../../components/SkiAreas";
 import { Feather } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 

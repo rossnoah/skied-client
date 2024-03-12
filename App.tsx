@@ -3,19 +3,19 @@ import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Settings } from "./src/Settings";
-import { AllMountains } from "./src/AllMountains";
+import { Settings } from "./src/navigation/tabs/Settings";
+import { AllMountains } from "./src/navigation/tabs/AllMountains";
 import { componentStyles } from "./src/styles";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { USMountains } from "./src/USMountains";
+import { USMountains } from "./src/navigation/tabs/USMountains";
 import * as SplashScreen from "expo-splash-screen";
 import jsonData from "./skiareas.json";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createStackNavigator } from "@react-navigation/stack";
-import { SelectionModal } from "./src/SelectionModal";
-import { MyMountains } from "./src/MyMountains";
+import { SelectionModal } from "./src/navigation/modals/SelectionModal";
+import { MyMountains } from "./src/navigation/tabs/MyMountains";
 import { useSkiAreasStore } from "./src/SkiAreaStore";
-import { Text } from "react-native";
+import { Compare } from "./src/navigation/tabs/Compare";
 
 /*
 TODO: ENABLE HAPTICS PERMISSION ON ANDROID
@@ -25,14 +25,6 @@ function TabThree() {
   return (
     <View style={componentStyles.container}>
       <Settings />
-    </View>
-  );
-}
-
-function Compare() {
-  return (
-    <View style={componentStyles.container}>
-      <Text>Compare</Text>
     </View>
   );
 }
