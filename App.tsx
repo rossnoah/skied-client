@@ -34,7 +34,7 @@ function TabNavigator() {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="My Mountains"
+        name="Skied"
         component={MyMountains}
         options={{
           headerShown: false, // This line removes the default header
@@ -70,7 +70,11 @@ function TabNavigator() {
         options={{
           headerShown: false, // This line removes the default header
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome6 name="code-compare" size={size * 0.9} color={color} />
+            <FontAwesome6
+              name="people-arrows"
+              size={size * 0.9}
+              color={color}
+            />
           ),
         }}
       />
