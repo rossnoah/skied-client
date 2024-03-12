@@ -41,7 +41,7 @@ export const TitleBar = () => {
         style={styles.headerButton}
         onPress={() => {
           console.log("plus");
-          navigation.navigate("Demo" as never); // Update the navigation options to be an object instead of an array
+          navigation.navigate("Selection Modal" as never); // Update the navigation options to be an object instead of an array
         }}
       >
         <Feather name="plus" size={24} color={coreStyles.colors.primaryText} />

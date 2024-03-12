@@ -62,6 +62,18 @@ export const componentStyles = StyleSheet.create({
   settingsContainer: {
     padding: coreStyles.spacing.md,
   },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: coreStyles.spacing.sm,
+    paddingVertical: coreStyles.spacing.xs,
+    paddingTop: coreStyles.spacing.xl4,
+    borderBottomWidth: 1,
+    borderBottomColor: coreStyles.colors.border,
+    backgroundColor: "#68CCEF",
+    fontSize: coreStyles.typography.subHeading.fontSize,
+  },
   settingsHeader: coreStyles.typography.settingsHeader,
   settingsItem: {
     flexDirection: "row",

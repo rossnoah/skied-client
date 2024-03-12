@@ -1,30 +1,20 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Text, View } from "react-native";
+import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Settings } from "./src/Settings";
 import { AllMountains } from "./src/AllMountains";
 import { componentStyles } from "./src/styles";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { TitleBar } from "./src/TitleBar";
 import { USMountains } from "./src/USMountains";
 import * as SplashScreen from "expo-splash-screen";
 import jsonData from "./skiareas.json";
-import { hasSkiedMap } from "./src/SkiAreas";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createStackNavigator } from "@react-navigation/stack";
 import { SelectionModal } from "./src/SelectionModal";
-
-// Placeholder components for other tabs
-function TabOne() {
-  return (
-    <View style={componentStyles.container}>
-      <TitleBar />
-      <Text>Tab One</Text>
-    </View>
-  );
-}
+import { MyMountains } from "./src/MyMountains";
+import { useSkiAreasStore } from "./src/SkiAreaStore";
 
 function TabThree() {
   return (
@@ -41,7 +31,7 @@ function TabNavigator() {
     <Tab.Navigator>
       <Tab.Screen
         name="My Mountains"
-        component={TabOne}
+        component={MyMountains}
         options={{
           headerShown: false, // This line removes the default header
           tabBarIcon: ({ color, size }) => (
@@ -105,7 +95,7 @@ function RootStackScreen() {
       />
       {/* Make the modal slide in from the bottom */}
       <RootStack.Screen
-        name="Demo"
+        name="Selection Modal"
         component={SelectionModal}
         options={{
           headerShown: false,
@@ -116,21 +106,30 @@ function RootStackScreen() {
   );
 }
 
+export async function loadFromAsyncStorage() {
+  await Promise.all(
+    jsonData.map(async (skiArea) => {
+      const id = skiArea.id;
+      const storedStatus = await AsyncStorage.getItem(id);
+      const fullSkiArea = {
+        name: skiArea.name,
+        country: skiArea.country,
+        state: skiArea.state || skiArea.country,
+        id: skiArea.id,
+        hasSkied: storedStatus === "true",
+      };
+      useSkiAreasStore.getState().addSkiArea(fullSkiArea);
+    })
+  );
+}
+
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
     async function prepare() {
       try {
-        jsonData.forEach(async (skiArea) => {
-          const id = skiArea.name;
-          const storedStatus = await AsyncStorage.getItem(id);
-          if (storedStatus && storedStatus === "true") {
-            hasSkiedMap.set(id, true);
-          } else {
-            hasSkiedMap.set(id, false);
-          }
-        });
+        loadFromAsyncStorage();
       } catch (e) {
         console.warn(e);
       } finally {

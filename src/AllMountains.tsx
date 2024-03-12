@@ -3,11 +3,14 @@ import { View } from "react-native";
 
 import { componentStyles, coreStyles } from "./styles";
 import { TitleBar } from "./TitleBar";
-import { SkiAreaList, sortedGroupedSkiAreas } from "./SkiAreas";
+import { SkiAreaList } from "./SkiAreas";
+import { useSkiAreasStore } from "./SkiAreaStore";
 
 export const AllMountains: React.FC = () => (
   <View style={componentStyles.container}>
     <TitleBar />
-    <SkiAreaList groupedSkiAreas={sortedGroupedSkiAreas} />
+    <SkiAreaList
+      groupedSkiAreas={useSkiAreasStore.getState().groupedSkiAreas}
+    />
   </View>
 );

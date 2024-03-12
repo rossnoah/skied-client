@@ -14,93 +14,16 @@ import { FlashList } from "@shopify/flash-list";
 import { logos } from "./images";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GroupedSkiAreas, SkiArea, useSkiAreasStore } from "./SkiAreaStore";
 
-export const hasSkiedMap = new Map<string, boolean>();
-
-export type SkiArea = {
-  name: string;
-  id: string;
-  country: string;
-  state: string;
-  hasSkied: boolean;
-};
-
-type RawSkiArea = {
+export type RawSkiArea = {
   name: string;
   id: string;
   country: string;
   state: string | null;
 };
 
-type RawJsonData = RawSkiArea[];
-
-export type GroupedSkiAreas = {
-  [country: string]: {
-    [state: string]: SkiArea[];
-  };
-};
-
-const rawJsonData: RawJsonData = jsonData;
-const groupedSkiAreas: GroupedSkiAreas = rawJsonData.reduce(
-  (acc: GroupedSkiAreas, skiArea) => {
-    let { country, state } = skiArea;
-
-    if (!state) {
-      state = country;
-    }
-
-    if (!acc[country]) {
-      acc[country] = {};
-    }
-
-    if (!acc[country][state]) {
-      acc[country][state] = [];
-    }
-
-    const fullSkiArea = {
-      name: skiArea.name,
-      country: skiArea.country,
-      state: skiArea.state || skiArea.country,
-      id: skiArea.id,
-      hasSkied: hasSkiedMap.get(skiArea.name) || false,
-    };
-
-    acc[country][state].push(fullSkiArea);
-
-    // Sort ski areas within each state
-    acc[country][state].sort((a, b) => a.name.localeCompare(b.name));
-
-    return acc;
-  },
-  {}
-);
-
-// Convert object to array and sort countries and states
-export const sortedGroupedSkiAreas: GroupedSkiAreas = Object.entries(
-  groupedSkiAreas
-)
-  .sort((a, b) => a[0].localeCompare(b[0])) // Sort countries
-  .reduce((acc: GroupedSkiAreas, [country, states]) => {
-    const sortedStates = Object.entries(states)
-      .sort((a, b) => a[0].localeCompare(b[0])) // Sort states within each country
-      .reduce((stateAcc: { [key: string]: SkiArea[] }, [state, skiAreas]) => {
-        stateAcc[state] = skiAreas; // Already sorted skiAreas
-        return stateAcc;
-      }, {});
-
-    acc[country] = sortedStates;
-    return acc;
-  }, {});
-
-//filter groupedSkiAreas to only include US ski areas, remove the non US ski areas
-export const sortedGroupedUSSkiAreas: GroupedSkiAreas = Object.keys(
-  sortedGroupedSkiAreas
-).reduce((acc: GroupedSkiAreas, country: string) => {
-  if (country === "United States") {
-    acc[country] = groupedSkiAreas[country];
-  }
-  return acc;
-}, {});
+export type RawJsonData = RawSkiArea[];
 
 const styles = StyleSheet.create({
   header: {
@@ -160,50 +83,34 @@ const styles = StyleSheet.create({
   },
 });
 
-export const toggleHasSkied = async (
-  skiArea: SkiArea,
-  setHasSkied: React.Dispatch<React.SetStateAction<boolean>>,
-  hasSkied: boolean
-) => {
-  const newHasSkiedValue = !hasSkied;
-  setHasSkied(newHasSkiedValue); // Update the local state
-  await AsyncStorage.setItem(skiArea.name, String(newHasSkiedValue)); // Update AsyncStorage
-};
-
 export const SkiAreaItem = ({
   skiArea,
   showUnselectedIndicator,
-  onPress, // The onPress prop is now optional
+  allowToggle = false, // The onPress prop is now optional
 }: {
   skiArea: SkiArea;
   showUnselectedIndicator: boolean;
-  onPress?: (
-    skiArea: SkiArea,
-    setHasSkied: React.Dispatch<React.SetStateAction<boolean>>,
-    hasSkied: boolean
-  ) => void;
+  allowToggle: boolean;
 }) => {
-  const [hasSkied, setHasSkied] = useState(skiArea.hasSkied);
+  const data = useSkiAreasStore(
+    (state) => state.groupedSkiAreas[skiArea.country][skiArea.state][skiArea.id]
+  );
 
-  useEffect(() => {
-    const fetchSkiedStatus = async () => {
-      const storedHasSkied = await AsyncStorage.getItem(skiArea.name);
-      if (storedHasSkied !== null && storedHasSkied !== String(hasSkied)) {
-        setHasSkied(storedHasSkied === "true");
-      }
-    };
-
-    fetchSkiedStatus();
-  }, [skiArea.name, hasSkied]);
+  const toggle = useSkiAreasStore.getState().toggleHasSkied;
 
   return (
     <TouchableOpacity
-      onPress={() => onPress?.(skiArea, setHasSkied, hasSkied)}
-      activeOpacity={onPress ? 0.2 : 1}
+      onPress={async () => {
+        if (allowToggle) {
+          const newStatus = toggle(data);
+          await AsyncStorage.setItem(data.id, newStatus.toString());
+        }
+      }}
+      activeOpacity={allowToggle ? 0.2 : 1}
     >
       <View style={componentStyles.listItem}>
         <Image
-          source={logos[skiArea.id as keyof typeof logos] || logos.default}
+          source={logos[data.id as keyof typeof logos] || logos.default}
           style={componentStyles.logo}
           resizeMode="contain"
         />
@@ -216,17 +123,17 @@ export const SkiAreaItem = ({
           }}
         >
           <View style={componentStyles.textContainer}>
-            <Text style={componentStyles.subHeadingStyle}>{skiArea.name}</Text>
-            <Text style={componentStyles.detailText}>{skiArea.state}</Text>
+            <Text style={componentStyles.subHeadingStyle}>{data.name}</Text>
+            <Text style={componentStyles.detailText}>{data.state}</Text>
           </View>
-          {hasSkied && (
+          {data.hasSkied && (
             <MaterialIcons
               name="check-circle"
               size={24}
               style={styles.skiedIconTrue}
             />
           )}
-          {!hasSkied && showUnselectedIndicator && (
+          {!data.hasSkied && showUnselectedIndicator && (
             <MaterialIcons
               name="radio-button-unchecked"
               size={24}
@@ -250,35 +157,48 @@ const StateHeader = ({ state }: { state: string }) => (
 export function SkiAreaList({
   groupedSkiAreas,
   showUnselectedIndicator = false,
-  onPress,
+  allowToggle = false,
+  onlyUnitedStates = false,
 }: {
   groupedSkiAreas: GroupedSkiAreas;
   showUnselectedIndicator?: boolean;
-  onPress?: (
-    skiArea: SkiArea,
-    setHasSkied: React.Dispatch<React.SetStateAction<boolean>>,
-    hasSkied: boolean
-  ) => void;
+  allowToggle?: boolean;
+  onlyUnitedStates?: boolean;
 }) {
+  if (onlyUnitedStates) {
+    groupedSkiAreas = Object.entries(groupedSkiAreas).reduce(
+      (
+        acc: Record<string, Record<string, Record<string, SkiArea>>>,
+        [country, states]
+      ) => {
+        if (country === "United States") {
+          acc[country] = states;
+        }
+        return acc;
+      },
+      {}
+    );
+  }
+
   return (
     <FlashList
       data={Object.entries(groupedSkiAreas)}
       renderItem={({
         item: [country, states],
       }: {
-        item: [string, Record<string, SkiArea[]>];
+        item: [string, Record<string, Record<string, SkiArea>>];
       }) => (
         <View key={country}>
           <CountryHeader country={country} />
           {Object.entries(states).map(([state, areas]) => (
             <View key={state}>
               {country !== state && <StateHeader state={state} />}
-              {areas.map((skiArea, index) => (
+              {Object.entries(areas).map(([id, skiArea]) => (
                 <SkiAreaItem
-                  key={index}
+                  key={id}
                   skiArea={skiArea}
                   showUnselectedIndicator={showUnselectedIndicator}
-                  onPress={onPress} // Pass the onPress function as a prop
+                  allowToggle={allowToggle} // Pass the onPress function as a prop
                 />
               ))}
             </View>
