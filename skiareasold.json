@@ -1,0 +1,551 @@
+[
+  {
+    "name": "Arapahoe Basin",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "arapahoebasin"
+  },
+  {
+    "name": "Aspen Snowmass",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "aspensnowmass"
+  },
+  {
+    "name": "Beaver Creek",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "beavercreek"
+  },
+  {
+    "name": "Breckenridge",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "breckenridge"
+  },
+  {
+    "name": "Copper Mountain",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "coppermountain"
+  },
+  {
+    "name": "Crested Butte",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "crestedbutte"
+  },
+  {
+    "name": "Echo Mountain",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "echomountain"
+  },
+  {
+    "name": "Eldora",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "eldora"
+  },
+  {
+    "name": "Hesperus Ski Area",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "hesperusskiarea"
+  },
+  {
+    "name": "Howelsen Hill",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "howelsenhill"
+  },
+  {
+    "name": "Kendall Mountain",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "kendallmountain"
+  },
+  {
+    "name": "Keystone",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "keystone"
+  },
+  {
+    "name": "Loveland",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "loveland"
+  },
+  {
+    "name": "Monarch Mountain",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "monarchmountain"
+  },
+  {
+    "name": "Powderhorn Resort",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "powderhornresort"
+  },
+  {
+    "name": "Purgatory Resort",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "purgatoryresort"
+  },
+  {
+    "name": "Silverton Mountain",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "silvertonmountain"
+  },
+  {
+    "name": "Ski Cooper",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "skicooper"
+  },
+  {
+    "name": "Ski Granby Ranch",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "skigranbyranch"
+  },
+  {
+    "name": "Steamboat",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "steamboat"
+  },
+  {
+    "name": "Sunlight",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "sunlight"
+  },
+  {
+    "name": "Telluride",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "telluride"
+  },
+  {
+    "name": "Vail",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "vail"
+  },
+  {
+    "name": "Winter Park",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "winterpark"
+  },
+  {
+    "name": "Wolf Creek",
+    "country": "United States",
+    "state": "Colorado",
+    "id": "wolfcreek"
+  },
+  { "name": "Alta", "country": "United States", "state": "Utah", "id": "alta" },
+  {
+    "name": "Beaver Mountain",
+    "country": "United States",
+    "state": "Utah",
+    "id": "beavermountain"
+  },
+  {
+    "name": "Brian Head",
+    "country": "United States",
+    "state": "Utah",
+    "id": "brianhead"
+  },
+  {
+    "name": "Brighton",
+    "country": "United States",
+    "state": "Utah",
+    "id": "brighton"
+  },
+  {
+    "name": "Canyons",
+    "country": "United States",
+    "state": "Utah",
+    "id": "canyons"
+  },
+  {
+    "name": "Cherry Peak",
+    "country": "United States",
+    "state": "Utah",
+    "id": "cherrypeak"
+  },
+  {
+    "name": "Deer Valley",
+    "country": "United States",
+    "state": "Utah",
+    "id": "deervalley"
+  },
+  {
+    "name": "Elk Mountain",
+    "country": "United States",
+    "state": "Utah",
+    "id": "elkmountain"
+  },
+  {
+    "name": "Nordic Valley",
+    "country": "United States",
+    "state": "Utah",
+    "id": "nordicvalley"
+  },
+  {
+    "name": "Park City Mountain",
+    "country": "United States",
+    "state": "Utah",
+    "id": "parkcitymountain"
+  },
+  {
+    "name": "Powder Mountain",
+    "country": "United States",
+    "state": "Utah",
+    "id": "powdermountain"
+  },
+  {
+    "name": "Snowbasin",
+    "country": "United States",
+    "state": "Utah",
+    "id": "snowbasin"
+  },
+  {
+    "name": "Snowbird",
+    "country": "United States",
+    "state": "Utah",
+    "id": "snowbird"
+  },
+  {
+    "name": "Soldier Hollow",
+    "country": "United States",
+    "state": "Utah",
+    "id": "soldierhollow"
+  },
+  {
+    "name": "Solitude",
+    "country": "United States",
+    "state": "Utah",
+    "id": "solitude"
+  },
+  {
+    "name": "Sundance",
+    "country": "United States",
+    "state": "Utah",
+    "id": "sundance"
+  },
+  {
+    "name": "Palisades Tahoe",
+    "country": "United States",
+    "state": "California",
+    "id": "palisadestahoe"
+  },
+  {
+    "name": "Mammoth Mountain",
+    "country": "United States",
+    "state": "California",
+    "id": "mammothmountain"
+  },
+  {
+    "name": "Heavenly Mountain Resort",
+    "country": "United States",
+    "state": "California",
+    "id": "heavenlymountainresort"
+  },
+  {
+    "name": "Mount Shasta Ski Park",
+    "country": "United States",
+    "state": "California",
+    "id": "mountshastaskipark"
+  },
+  {
+    "name": "Alpine Meadows",
+    "country": "United States",
+    "state": "California",
+    "id": "alpinemeadows"
+  },
+  {
+    "name": "Boreal",
+    "country": "United States",
+    "state": "California",
+    "id": "boreal"
+  },
+  {
+    "name": "Donner Ski Ranch",
+    "country": "United States",
+    "state": "California",
+    "id": "donnerskiranch"
+  },
+  {
+    "name": "Homewood",
+    "country": "United States",
+    "state": "California",
+    "id": "homewood"
+  },
+  {
+    "name": "Kirkwood",
+    "country": "United States",
+    "state": "California",
+    "id": "kirkwood"
+  },
+  {
+    "name": "Northstar at Tahoe",
+    "country": "United States",
+    "state": "California",
+    "id": "northstarattahoe"
+  },
+  {
+    "name": "Sierra-at-Tahoe",
+    "country": "United States",
+    "state": "California",
+    "id": "sierra-at-tahoe"
+  },
+  {
+    "name": "Sugar Bowl",
+    "country": "United States",
+    "state": "California",
+    "id": "sugarbowl"
+  },
+  {
+    "name": "Soda Springs",
+    "country": "United States",
+    "state": "California",
+    "id": "sodasprings"
+  },
+  {
+    "name": "Tahoe Donner",
+    "country": "United States",
+    "state": "California",
+    "id": "tahoedonner"
+  },
+  {
+    "name": "Bear Valley",
+    "country": "United States",
+    "state": "California",
+    "id": "bearvalley"
+  },
+  {
+    "name": "Dodge Ridge",
+    "country": "United States",
+    "state": "California",
+    "id": "dodgeridge"
+  },
+  {
+    "name": "June Mountain",
+    "country": "United States",
+    "state": "California",
+    "id": "junemountain"
+  },
+  {
+    "name": "China Peak",
+    "country": "United States",
+    "state": "California",
+    "id": "chinapeak"
+  },
+  {
+    "name": "Alta Sierra",
+    "country": "United States",
+    "state": "California",
+    "id": "altasierra"
+  },
+  {
+    "name": "Buckhorn Ski and Snowboard Club",
+    "country": "United States",
+    "state": "California",
+    "id": "buckhornskiandsnowboardclub"
+  },
+  {
+    "name": "Bear Mountain",
+    "country": "United States",
+    "state": "California",
+    "id": "bearmountain"
+  },
+  {
+    "name": "Badger Pass",
+    "country": "United States",
+    "state": "California",
+    "id": "badgerpass"
+  },
+  {
+    "name": "Kratka Ridge",
+    "country": "United States",
+    "state": "California",
+    "id": "kratkaridge"
+  },
+  {
+    "name": "Mount Baldy Ski Lifts",
+    "country": "United States",
+    "state": "California",
+    "id": "mountbaldyskilifts"
+  },
+  {
+    "name": "Mount Waterman",
+    "country": "United States",
+    "state": "California",
+    "id": "mountwaterman"
+  },
+  {
+    "name": "Mountain High",
+    "country": "United States",
+    "state": "California",
+    "id": "mountainhigh"
+  },
+  {
+    "name": "Snow Summit",
+    "country": "United States",
+    "state": "California",
+    "id": "snowsummit"
+  },
+  {
+    "name": "Snow Valley Mountain Resort",
+    "country": "United States",
+    "state": "California",
+    "id": "snowvalleymountainresort"
+  },
+  {
+    "name": "Cedar Pass Ski Area",
+    "country": "United States",
+    "state": "California",
+    "id": "cedarpassskiarea"
+  },
+  {
+    "name": "Zermatt",
+    "country": "Switzerland",
+    "state": null,
+    "id": "zermatt"
+  },
+  {
+    "name": "St. Moritz",
+    "country": "Switzerland",
+    "state": null,
+    "id": "stmoritz"
+  },
+  {
+    "name": "Verbier",
+    "country": "Switzerland",
+    "state": null,
+    "id": "verbier"
+  },
+  { "name": "Chamonix", "country": "France", "state": null, "id": "chamonix" },
+  { "name": "Meg\u00e8ve", "country": "France", "state": null, "id": "megeve" },
+  {
+    "name": "Kitzbuhel",
+    "country": "Austria",
+    "state": null,
+    "id": "kitzbuhel"
+  },
+  {
+    "name": "Belleayre Mountain",
+    "country": "United States",
+    "state": "New York",
+    "id": "belleayremountain"
+  },
+  {
+    "name": "Bristol Mountain Ski Resort",
+    "country": "United States",
+    "state": "New York",
+    "id": "bristolmountainskiresort"
+  },
+  {
+    "name": "Catamount Ski Area",
+    "country": "United States",
+    "state": "New York",
+    "id": "catamountskiarea"
+  },
+  {
+    "name": "Gore Mountain",
+    "country": "United States",
+    "state": "New York",
+    "id": "goremountain"
+  },
+  {
+    "name": "Greek Peak Mountain Resort",
+    "country": "United States",
+    "state": "New York",
+    "id": "greekpeakmountainresort"
+  },
+  {
+    "name": "Holiday Valley",
+    "country": "United States",
+    "state": "New York",
+    "id": "holidayvalley"
+  },
+  {
+    "name": "Hunter Mountain",
+    "country": "United States",
+    "state": "New York",
+    "id": "huntermountain"
+  },
+  {
+    "name": "McCauley Mountain",
+    "country": "United States",
+    "state": "New York",
+    "id": "mccauleymountain"
+  },
+  {
+    "name": "Mount Peter",
+    "country": "United States",
+    "state": "New York",
+    "id": "mountpeter"
+  },
+  {
+    "name": "Peek'n Peak",
+    "country": "United States",
+    "state": "New York",
+    "id": "peek'npeak"
+  },
+  {
+    "name": "Plattekill Mountain",
+    "country": "United States",
+    "state": "New York",
+    "id": "plattekillmountain"
+  },
+  {
+    "name": "Thunder Ridge Ski Area",
+    "country": "United States",
+    "state": "New York",
+    "id": "thunderridgeskiarea"
+  },
+  {
+    "name": "Titus Mountain",
+    "country": "United States",
+    "state": "New York",
+    "id": "titusmountain"
+  },
+  {
+    "name": "Tuxedo Ridge Ski Center",
+    "country": "United States",
+    "state": "New York",
+    "id": "tuxedoridgeskicenter"
+  },
+  {
+    "name": "Mount Van Hoevenberg",
+    "country": "United States",
+    "state": "New York",
+    "id": "mountvanhoevenberg"
+  },
+  {
+    "name": "West Mountain",
+    "country": "United States",
+    "state": "New York",
+    "id": "westmountain"
+  },
+  {
+    "name": "Whiteface Mountain",
+    "country": "United States",
+    "state": "New York",
+    "id": "whitefacemountain"
+  },
+  {
+    "name": "Windham Mountain Club",
+    "country": "United States",
+    "state": "New York",
+    "id": "windhammountainclub"
+  }
+]
