@@ -14,7 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createStackNavigator } from "@react-navigation/stack";
 import { SelectionModal } from "./src/navigation/modals/SelectionModal";
 import { MyMountains } from "./src/navigation/tabs/MyMountains";
-import { useSkiAreasStore } from "./src/SkiAreaStore";
+import { SkiArea, useSkiAreasStore } from "./src/SkiAreaStore";
 import { Compare } from "./src/navigation/tabs/Compare";
 
 /*
@@ -117,20 +117,24 @@ function RootStackScreen() {
 }
 
 export async function loadFromAsyncStorage() {
-  await Promise.all(
-    jsonData.map(async (skiArea) => {
-      const id = skiArea.id;
-      const storedStatus = await AsyncStorage.getItem(id);
-      const fullSkiArea = {
-        name: skiArea.name,
-        country: skiArea.country,
-        state: skiArea.state || skiArea.country,
-        id: skiArea.id,
-        hasSkied: storedStatus === "true",
-      };
-      useSkiAreasStore.getState().addSkiArea(fullSkiArea);
-    })
-  );
+  const keys = jsonData.map((skiArea) => skiArea.id);
+
+  const storedStatuses = await AsyncStorage.multiGet(keys);
+
+  //loop through that jsondata with an index
+  for (let i = 0; i < jsonData.length; i++) {
+    const skiArea = jsonData[i];
+    const status = storedStatuses[i][1];
+    const fullSkiArea: SkiArea = {
+      id: skiArea.id,
+      name: skiArea.name,
+      state: skiArea.state || skiArea.country,
+      country: skiArea.country,
+      hasSkied: status === "true",
+    };
+
+    useSkiAreasStore.getState().addSkiArea(fullSkiArea);
+  }
 }
 
 export default function App() {

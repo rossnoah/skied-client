@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, Share } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { coreStyles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
@@ -32,6 +32,31 @@ const styles = StyleSheet.create({
   },
 });
 
+const shareInvitationLink = async () => {
+  const invitationUrl = "https://skied.app"; // Replace with your actual invitation link
+  const message = "Join me on this amazing app! Here is your invitation link: "; // Optional message to include with the link
+
+  try {
+    const result = await Share.share({
+      message: `${message}${invitationUrl}`,
+      url: invitationUrl, // Some platforms may use this field
+      title: "App Invitation", // Optional title
+    });
+
+    if (result.action === Share.sharedAction) {
+      if (result.activityType) {
+        // Shared with activity type of result.activityType
+      } else {
+        // Shared
+      }
+    } else if (result.action === Share.dismissedAction) {
+      // Dismissed
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const TitleBar = () => {
   const navigation = useNavigation(); // Use the useNavigation hook to get access to navigation
 
@@ -40,7 +65,6 @@ export const TitleBar = () => {
       <TouchableOpacity
         style={styles.headerButton}
         onPress={() => {
-          console.log("plus");
           navigation.navigate("Selection Modal" as never); // Update the navigation options to be an object instead of an array
         }}
       >
@@ -51,7 +75,7 @@ export const TitleBar = () => {
       </View>
       <TouchableOpacity
         style={styles.headerButton}
-        onPress={() => console.log("share")}
+        onPress={() => shareInvitationLink()}
       >
         <Feather name="share" size={24} color={coreStyles.colors.primaryText} />
       </TouchableOpacity>

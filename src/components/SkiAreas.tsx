@@ -231,7 +231,7 @@ export const SkiAreaList = ({
           ))}
         </View>
       )}
-      estimatedItemSize={100}
+      estimatedItemSize={400}
     />
   );
 };

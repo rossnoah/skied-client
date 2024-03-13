@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "mobileapp",
-    "slug": "mobileapp",
+    "name": "skied",
+    "slug": "skied",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,12 +11,11 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "dev.noah.skied"
+      "bundleIdentifier": "dev.noah.skied",
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,12 +27,13 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
+      "router": {
+        "origin": false
+      },
       "eas": {
-        "projectId": "829aa11d-85a6-4e50-ba68-4062c3d60e89"
+        "projectId": "edf33c87-724b-48c3-aafb-4f9dc8bdb6a1"
       }
     },
-    "plugins": [
-      "expo-router"
-    ]
+    "plugins": ["expo-router"]
   }
 }
