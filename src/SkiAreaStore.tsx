@@ -36,6 +36,7 @@ export type GroupedSkiAreas = {
 // Define the store interface including the data and all utility functions
 export interface SkiAreasStore {
   groupedSkiAreas: GroupedSkiAreas;
+  idList: string[];
   addSkiArea: (skiArea: SkiArea) => void;
   toggleHasSkied: (skiArea: SkiArea) => boolean;
   clearHasSkied: () => void;
@@ -43,6 +44,7 @@ export interface SkiAreasStore {
 
 // Create the Zustand store
 export const useSkiAreasStore = create<SkiAreasStore>((set) => ({
+  idList: [],
   groupedSkiAreas: {
     total: 0,
     totalHasSkied: 0,
@@ -63,6 +65,7 @@ export const useSkiAreasStore = create<SkiAreasStore>((set) => ({
           country.totalHasSkied += skiArea.hasSkied ? 1 : 0;
           state.groupedSkiAreas.total += 1;
           state.groupedSkiAreas.totalHasSkied += skiArea.hasSkied ? 1 : 0;
+          state.idList.push(skiArea.id);
         }
 
         stateData.skiAreas[skiArea.id] = skiArea;
