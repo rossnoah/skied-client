@@ -9,6 +9,7 @@ import { CountrySkiAreas, SkiArea, useSkiAreasStore } from "../SkiAreaStore";
 import * as Haptics from "expo-haptics";
 import { filterToHasSkied, filterToUSA } from "../utils/filters";
 import { useShallow } from "zustand/react/shallow";
+import { formatPercentage } from "../utils/formating";
 
 export type RawSkiArea = {
   name: string;
@@ -50,8 +51,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingVertical: coreStyles.spacing.xs2,
     paddingHorizontal: coreStyles.spacing.sm,
-    backgroundColor: coreStyles.colors.accent, // Light blue background for country header
     color: coreStyles.colors.primaryText, // Assuming your coreStyles defines this
+  },
+  placeDetails: {
+    fontSize: coreStyles.typography.detailText.fontSize,
+    fontWeight: "600",
+    paddingHorizontal: coreStyles.spacing.sm,
+    color: coreStyles.colors.secondaryText,
+    paddingVertical: coreStyles.spacing.xs2,
   },
   stateHeader: {
     fontSize: 18,
@@ -175,13 +182,62 @@ export const SkiAreaItem = React.memo(
   }
 );
 
-const CountryHeader = ({ country }: { country: string }) => (
-  <Text style={styles.countryHeader}>{country}</Text>
-);
+const CountryHeader = ({ country }: { country: string }) => {
+  const totalSkiAreas = useSkiAreasStore(
+    (state) => state.groupedSkiAreas.countries[country].total
+  );
+  const totalHasSkied = useSkiAreasStore(
+    (state) => state.groupedSkiAreas.countries[country].totalHasSkied
+  );
 
-const StateHeader = ({ state }: { state: string }) => (
-  <Text style={styles.stateHeader}>{state}</Text>
-);
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        backgroundColor: coreStyles.colors.accent, // Light blue background for country header
+        alignItems: "flex-end",
+      }}
+    >
+      <Text style={styles.countryHeader}>{country}</Text>
+      <Text style={styles.placeDetails}>{`${totalHasSkied} | ${formatPercentage(
+        totalHasSkied / totalSkiAreas
+      )}`}</Text>
+    </View>
+  );
+};
+
+const StateHeader = ({
+  stateName,
+  country,
+}: {
+  stateName: string;
+  country: string;
+}) => {
+  const totalSkiAreas = useSkiAreasStore(
+    (state) => state.groupedSkiAreas.countries[country].states[stateName].total
+  );
+  const totalHasSkied = useSkiAreasStore(
+    (state) =>
+      state.groupedSkiAreas.countries[country].states[stateName].totalHasSkied
+  );
+
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        backgroundColor: coreStyles.colors.darkerBackground, // Light grey background for state header
+        alignItems: "flex-end",
+      }}
+    >
+      <Text style={styles.stateHeader}>{stateName}</Text>
+      <Text style={styles.placeDetails}>{`${totalHasSkied} | ${formatPercentage(
+        totalHasSkied / totalSkiAreas
+      )}`}</Text>
+    </View>
+  );
+};
 
 export const SkiAreaList = ({
   showUnselectedIndicator = false,
@@ -221,7 +277,9 @@ export const SkiAreaList = ({
           <CountryHeader country={countryName} />
           {Object.entries(countryData.states).map(([stateName, stateData]) => (
             <View key={stateName}>
-              <StateHeader state={stateName} />
+              {stateName !== countryName && (
+                <StateHeader stateName={stateName} country={countryName} />
+              )}
               {Object.entries(stateData.skiAreas).map(([id, skiArea]) => (
                 <SkiAreaItem
                   key={id}
