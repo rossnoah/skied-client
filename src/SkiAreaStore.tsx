@@ -29,119 +29,106 @@ interface SkiAreasStore {
   clearHasSkied: () => void;
 }
 
+// Utility function to ensure the nested structure for groupedSkiAreas
+const ensureNestedStructure = (
+  state: SkiAreasStore,
+  country: string,
+  stateName: string
+): void => {
+  if (!state.groupedSkiAreas[country]) {
+    state.groupedSkiAreas[country] = {};
+  }
+  if (!state.groupedSkiAreas[country][stateName]) {
+    state.groupedSkiAreas[country][stateName] = {};
+  }
+};
+
+// Utility function to sort ski areas
+const sortSkiAreas = (skiAreas: {
+  [id: string]: SkiArea;
+}): { [id: string]: SkiArea } => {
+  return Object.values(skiAreas)
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .reduce((acc, skiArea) => {
+      acc[skiArea.id as string] = skiArea;
+      return acc;
+    }, {} as { [id: string]: SkiArea });
+};
+
+// Utility function to sort the grouped ski areas by country and state
+const sortGroupedSkiAreas = (
+  groupedSkiAreas: GroupedSkiAreas
+): GroupedSkiAreas => {
+  const sortedGroupedSkiAreas: GroupedSkiAreas = {};
+  Object.keys(groupedSkiAreas)
+    .sort()
+    .forEach((country) => {
+      sortedGroupedSkiAreas[country] = {};
+      Object.keys(groupedSkiAreas[country])
+        .sort()
+        .forEach((stateName) => {
+          sortedGroupedSkiAreas[country][stateName] =
+            groupedSkiAreas[country][stateName];
+        });
+    });
+  return sortedGroupedSkiAreas;
+};
+
 // Create the Zustand store
 export const useSkiAreasStore = create<SkiAreasStore>((set, get) => ({
   groupedSkiAreas: {},
   totalSkiAreas: 0,
   totalHasSkied: 0,
   idList: [],
-  addSkiArea: (skiArea: SkiArea) => {
+  addSkiArea: (skiArea: SkiArea): void => {
     set(
       produce((state: SkiAreasStore) => {
-        // Check if the country exists, if not, initialize it
-        if (!state.groupedSkiAreas[skiArea.country]) {
-          state.groupedSkiAreas[skiArea.country] = {};
-        }
+        ensureNestedStructure(state, skiArea.country, skiArea.state);
 
-        // Check if the state exists in the country, if not, initialize it
-        if (!state.groupedSkiAreas[skiArea.country][skiArea.state]) {
-          state.groupedSkiAreas[skiArea.country][skiArea.state] = {} as {
-            [id: string]: SkiArea;
-          };
-        }
-
-        // Add the ski area to the state, increment totalSkiAreas counter
         if (
           !state.groupedSkiAreas[skiArea.country][skiArea.state][skiArea.id]
         ) {
-          state.totalSkiAreas += 1; // Increment only if the ski area is new
+          state.totalSkiAreas += 1;
           state.idList.push(skiArea.id);
-
-          if (skiArea.hasSkied) {
-            state.totalHasSkied += 1; // Increment only if the ski area is new and hasSkied
-          }
+          state.totalHasSkied += skiArea.hasSkied ? 1 : 0;
         }
 
-        // Add the ski area to the state
         state.groupedSkiAreas[skiArea.country][skiArea.state][skiArea.id] =
           skiArea;
 
-        // Sort ski areas within the state
-        const sortedSkiAreas = Object.values(
+        state.groupedSkiAreas[skiArea.country][skiArea.state] = sortSkiAreas(
           state.groupedSkiAreas[skiArea.country][skiArea.state]
-        ).sort((a, b) => a.name.localeCompare(b.name));
-        state.groupedSkiAreas[skiArea.country][skiArea.state] =
-          sortedSkiAreas.reduce((acc, skiArea) => {
-            acc[skiArea.id] = skiArea;
-            return acc;
-          }, {} as { [id: string]: SkiArea });
+        );
+
+        state.groupedSkiAreas = sortGroupedSkiAreas(state.groupedSkiAreas);
       })
     );
-
-    // Sort countries and states after adding a new ski area
+  },
+  toggleHasSkied: (skiArea: SkiArea): boolean => {
+    const { country, state: stateName, id } = skiArea;
     set(
       produce((state: SkiAreasStore) => {
-        const sortedCountries = Object.keys(state.groupedSkiAreas).sort();
-        const sortedGroupedSkiAreas: GroupedSkiAreas = {};
+        ensureNestedStructure(state, country, stateName);
 
-        sortedCountries.forEach((country) => {
-          sortedGroupedSkiAreas[country] = {};
-          const sortedStates = Object.keys(
-            state.groupedSkiAreas[country]
-          ).sort();
-
-          sortedStates.forEach((stateName) => {
-            sortedGroupedSkiAreas[country][stateName] =
-              state.groupedSkiAreas[country][stateName];
+        const currentSkiArea = state.groupedSkiAreas[country][stateName][id];
+        if (currentSkiArea) {
+          currentSkiArea.hasSkied = !currentSkiArea.hasSkied;
+          state.totalHasSkied += currentSkiArea.hasSkied ? 1 : -1;
+        }
+      })
+    );
+    return get().groupedSkiAreas[country][stateName][id].hasSkied;
+  },
+  clearHasSkied: (): void => {
+    set(
+      produce((state: SkiAreasStore) => {
+        Object.values(state.groupedSkiAreas).forEach((states) => {
+          Object.values(states).forEach((skiAreas) => {
+            Object.values(skiAreas).forEach((skiArea) => {
+              skiArea.hasSkied = false;
+            });
           });
         });
-
-        state.groupedSkiAreas = sortedGroupedSkiAreas;
-      })
-    );
-  },
-  toggleHasSkied: (skiArea: SkiArea) => {
-    const country = skiArea.country;
-    const state = skiArea.state;
-    const id = skiArea.id;
-    set(
-      produce((draft: SkiAreasStore) => {
-        // Ensure the nested structure exists up to the desired ski area
-        if (
-          draft.groupedSkiAreas[country] &&
-          draft.groupedSkiAreas[country][state] &&
-          draft.groupedSkiAreas[country][state][id]
-        ) {
-          // Toggle the hasSkied property
-          draft.groupedSkiAreas[country][state][id].hasSkied =
-            !draft.groupedSkiAreas[country][state][id].hasSkied;
-
-          // Increment or decrement totalHasSkied based on the new value of hasSkied
-          draft.totalHasSkied += draft.groupedSkiAreas[country][state][id]
-            .hasSkied
-            ? 1
-            : -1;
-        }
-      })
-    );
-    //return the new value of hasSkied
-    return get().groupedSkiAreas[country][state][id].hasSkied;
-  },
-  clearHasSkied: () => {
-    set(
-      produce((state: SkiAreasStore) => {
-        // Iterate over all countries
-        for (const country in state.groupedSkiAreas) {
-          // Iterate over all states within the country
-          for (const stateName in state.groupedSkiAreas[country]) {
-            // Iterate over all ski areas within the state
-            for (const id in state.groupedSkiAreas[country][stateName]) {
-              // Set hasSkied to false for each ski area
-              state.groupedSkiAreas[country][stateName][id].hasSkied = false;
-            }
-          }
-        }
-        // Reset totalHasSkied counter to 0
         state.totalHasSkied = 0;
       })
     );
