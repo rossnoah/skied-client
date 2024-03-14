@@ -49,7 +49,6 @@ export function Settings() {
 
   return (
     <ScrollView contentContainerStyle={componentStyles.settingsContainer}>
-      <Text style={componentStyles.settingsHeader}>Settings</Text>
       <View style={componentStyles.settingsItem}>
         <Text style={componentStyles.settingsText}>Enable Notifications</Text>
         <Switch

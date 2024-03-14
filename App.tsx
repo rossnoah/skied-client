@@ -15,7 +15,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { SelectionModal } from "./src/navigation/modals/SelectionModal";
 import { MyMountains } from "./src/navigation/tabs/MyMountains";
 import { SkiArea, useSkiAreasStore } from "./src/SkiAreaStore";
-import { Compare } from "./src/navigation/tabs/Compare";
+import { Stats } from "./src/navigation/tabs/Stats";
 
 /*
 TODO: ENABLE HAPTICS PERMISSION ON ANDROID
@@ -67,16 +67,12 @@ function TabNavigator() {
       />
 
       <Tab.Screen
-        name="Compare"
-        component={Compare}
+        name="Stats"
+        component={Stats}
         options={{
           headerShown: false, // This line removes the default header
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome6
-              name="people-arrows"
-              size={size * 0.9}
-              color={color}
-            />
+            <FontAwesome6 name="trophy" size={size * 0.9} color={color} />
           ),
         }}
       />
