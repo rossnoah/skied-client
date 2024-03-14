@@ -1,5 +1,10 @@
 import { create } from "zustand";
 import { produce } from "immer";
+import {
+  ensureNestedStructure,
+  sortSkiAreas,
+  sortGroupedSkiAreas,
+} from "./utils/sorting";
 
 // Define the SkiArea type
 export type SkiArea = {
@@ -10,97 +15,61 @@ export type SkiArea = {
   hasSkied: boolean;
 };
 
+export type StateSkiAreas = {
+  total: number;
+  totalHasSkied: number;
+  skiAreas: { [id: string]: SkiArea };
+};
+
+export type CountrySkiAreas = {
+  total: number;
+  totalHasSkied: number;
+  states: { [state: string]: StateSkiAreas };
+};
+
 export type GroupedSkiAreas = {
-  [country: string]: {
-    [state: string]: {
-      [id: string]: SkiArea;
-    };
-  };
+  total: number;
+  totalHasSkied: number;
+  countries: { [country: string]: CountrySkiAreas };
 };
 
 // Define the store interface including the data and all utility functions
-interface SkiAreasStore {
+export interface SkiAreasStore {
   groupedSkiAreas: GroupedSkiAreas;
-  totalSkiAreas: number;
-  totalHasSkied: number;
-  idList: string[];
   addSkiArea: (skiArea: SkiArea) => void;
   toggleHasSkied: (skiArea: SkiArea) => boolean;
   clearHasSkied: () => void;
 }
 
-// Utility function to ensure the nested structure for groupedSkiAreas
-const ensureNestedStructure = (
-  state: SkiAreasStore,
-  country: string,
-  stateName: string
-): void => {
-  if (!state.groupedSkiAreas[country]) {
-    state.groupedSkiAreas[country] = {};
-  }
-  if (!state.groupedSkiAreas[country][stateName]) {
-    state.groupedSkiAreas[country][stateName] = {};
-  }
-};
-
-// Utility function to sort ski areas
-const sortSkiAreas = (skiAreas: {
-  [id: string]: SkiArea;
-}): { [id: string]: SkiArea } => {
-  return Object.values(skiAreas)
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .reduce((acc, skiArea) => {
-      acc[skiArea.id as string] = skiArea;
-      return acc;
-    }, {} as { [id: string]: SkiArea });
-};
-
-// Utility function to sort the grouped ski areas by country and state
-const sortGroupedSkiAreas = (
-  groupedSkiAreas: GroupedSkiAreas
-): GroupedSkiAreas => {
-  const sortedGroupedSkiAreas: GroupedSkiAreas = {};
-  Object.keys(groupedSkiAreas)
-    .sort()
-    .forEach((country) => {
-      sortedGroupedSkiAreas[country] = {};
-      Object.keys(groupedSkiAreas[country])
-        .sort()
-        .forEach((stateName) => {
-          sortedGroupedSkiAreas[country][stateName] =
-            groupedSkiAreas[country][stateName];
-        });
-    });
-  return sortedGroupedSkiAreas;
-};
-
 // Create the Zustand store
-export const useSkiAreasStore = create<SkiAreasStore>((set, get) => ({
-  groupedSkiAreas: {},
-  totalSkiAreas: 0,
-  totalHasSkied: 0,
-  idList: [],
+export const useSkiAreasStore = create<SkiAreasStore>((set) => ({
+  groupedSkiAreas: {
+    total: 0,
+    totalHasSkied: 0,
+    countries: {},
+  },
   addSkiArea: (skiArea: SkiArea): void => {
     set(
       produce((state: SkiAreasStore) => {
         ensureNestedStructure(state, skiArea.country, skiArea.state);
 
-        if (
-          !state.groupedSkiAreas[skiArea.country][skiArea.state][skiArea.id]
-        ) {
-          state.totalSkiAreas += 1;
-          state.idList.push(skiArea.id);
-          state.totalHasSkied += skiArea.hasSkied ? 1 : 0;
+        const country = state.groupedSkiAreas.countries[skiArea.country];
+        const stateData = country.states[skiArea.state];
+
+        if (!stateData.skiAreas[skiArea.id]) {
+          stateData.total += 1;
+          stateData.totalHasSkied += skiArea.hasSkied ? 1 : 0;
+          country.total += 1;
+          country.totalHasSkied += skiArea.hasSkied ? 1 : 0;
+          state.groupedSkiAreas.total += 1;
+          state.groupedSkiAreas.totalHasSkied += skiArea.hasSkied ? 1 : 0;
         }
 
-        state.groupedSkiAreas[skiArea.country][skiArea.state][skiArea.id] =
-          skiArea;
-
-        state.groupedSkiAreas[skiArea.country][skiArea.state] = sortSkiAreas(
-          state.groupedSkiAreas[skiArea.country][skiArea.state]
-        );
-
-        state.groupedSkiAreas = sortGroupedSkiAreas(state.groupedSkiAreas);
+        stateData.skiAreas[skiArea.id] = skiArea;
+        stateData.skiAreas = sortSkiAreas(stateData.skiAreas);
+        state.groupedSkiAreas.countries = sortGroupedSkiAreas(
+          state.groupedSkiAreas
+        ).countries;
       })
     );
   },
@@ -110,26 +79,36 @@ export const useSkiAreasStore = create<SkiAreasStore>((set, get) => ({
       produce((state: SkiAreasStore) => {
         ensureNestedStructure(state, country, stateName);
 
-        const currentSkiArea = state.groupedSkiAreas[country][stateName][id];
+        const currentSkiArea =
+          state.groupedSkiAreas.countries[country].states[stateName].skiAreas[
+            id
+          ];
         if (currentSkiArea) {
           currentSkiArea.hasSkied = !currentSkiArea.hasSkied;
-          state.totalHasSkied += currentSkiArea.hasSkied ? 1 : -1;
+          const increment = currentSkiArea.hasSkied ? 1 : -1;
+          state.groupedSkiAreas.countries[country].states[
+            stateName
+          ].totalHasSkied += increment;
+          state.groupedSkiAreas.countries[country].totalHasSkied += increment;
+          state.groupedSkiAreas.totalHasSkied += increment;
         }
       })
     );
-    return get().groupedSkiAreas[country][stateName][id].hasSkied;
+    return skiArea.hasSkied;
   },
   clearHasSkied: (): void => {
     set(
       produce((state: SkiAreasStore) => {
-        Object.values(state.groupedSkiAreas).forEach((states) => {
-          Object.values(states).forEach((skiAreas) => {
-            Object.values(skiAreas).forEach((skiArea) => {
+        Object.values(state.groupedSkiAreas.countries).forEach((country) => {
+          country.totalHasSkied = 0;
+          Object.values(country.states).forEach((state) => {
+            state.totalHasSkied = 0;
+            Object.values(state.skiAreas).forEach((skiArea) => {
               skiArea.hasSkied = false;
             });
           });
         });
-        state.totalHasSkied = 0;
+        state.groupedSkiAreas.totalHasSkied = 0;
       })
     );
   },

@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { componentStyles, coreStyles } from "../styles";
 import { FlashList } from "@shopify/flash-list";
 import { logos } from "../images";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SkiArea, useSkiAreasStore } from "../SkiAreaStore";
+import { CountrySkiAreas, SkiArea, useSkiAreasStore } from "../SkiAreaStore";
 import * as Haptics from "expo-haptics";
-import { filterToHasSkied, filterToUSA } from "../filters";
+import { filterToHasSkied, filterToUSA } from "../utils/filters";
 import { useShallow } from "zustand/react/shallow";
 
 export type RawSkiArea = {
@@ -92,7 +92,8 @@ export const SkiAreaItem = React.memo(
     const data = useSkiAreasStore(
       useShallow(
         (state) =>
-          state.groupedSkiAreas[skiArea.country][skiArea.state][skiArea.id]
+          state.groupedSkiAreas.countries[skiArea.country].states[skiArea.state]
+            .skiAreas[skiArea.id]
       )
     );
     const toggle = useSkiAreasStore.getState().toggleHasSkied;
@@ -188,12 +189,14 @@ export const SkiAreaList = ({
   allowLongPress: allowLongPress = false,
   onlyUnitedStates = false,
   onlyHasSkied = false,
+  ListHeaderComponent = undefined,
 }: {
   showUnselectedIndicator?: boolean;
   allowPress?: boolean;
   allowLongPress?: boolean;
   onlyUnitedStates?: boolean;
   onlyHasSkied?: boolean;
+  ListHeaderComponent?: ReactElement;
 }) => {
   let groupedSkiAreas = useSkiAreasStore((state) => state.groupedSkiAreas);
 
@@ -207,23 +210,24 @@ export const SkiAreaList = ({
 
   return (
     <FlashList
-      data={Object.entries(groupedSkiAreas)}
+      data={Object.entries(groupedSkiAreas.countries)} // Access the countries property
+      ListHeaderComponent={ListHeaderComponent}
       renderItem={({
-        item: [country, states],
+        item: [countryName, countryData],
       }: {
-        item: [string, Record<string, Record<string, SkiArea>>];
+        item: [string, CountrySkiAreas]; // Adjust the type according to the new structure
       }) => (
-        <View key={country}>
-          <CountryHeader country={country} />
-          {Object.entries(states).map(([state, areas]) => (
-            <View key={state}>
-              {country !== state && <StateHeader state={state} />}
-              {Object.entries(areas).map(([id, skiArea]) => (
+        <View key={countryName}>
+          <CountryHeader country={countryName} />
+          {Object.entries(countryData.states).map(([stateName, stateData]) => (
+            <View key={stateName}>
+              <StateHeader state={stateName} />
+              {Object.entries(stateData.skiAreas).map(([id, skiArea]) => (
                 <SkiAreaItem
                   key={id}
                   skiArea={skiArea}
                   showUnselectedIndicator={showUnselectedIndicator}
-                  allowPress={allowPress} // Pass the onPress function as a prop
+                  allowPress={allowPress} // Ensure you pass an onPress function as a prop if needed
                   allowLongPress={allowLongPress}
                 />
               ))}

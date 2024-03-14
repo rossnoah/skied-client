@@ -34,8 +34,12 @@ const StatsCompletionBar = ({ value }: { value: number }) => {
 };
 
 export const StatsHasSkied: React.FC = () => {
-  const totalSkiAreas = useSkiAreasStore((state) => state.totalSkiAreas);
-  const totalHasSkied = useSkiAreasStore((state) => state.totalHasSkied);
+  const totalSkiAreas = useSkiAreasStore(
+    (state) => state.groupedSkiAreas.total
+  );
+  const totalHasSkied = useSkiAreasStore(
+    (state) => state.groupedSkiAreas.totalHasSkied
+  );
 
   return (
     <StatsBox

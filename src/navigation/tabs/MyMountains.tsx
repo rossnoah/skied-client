@@ -10,9 +10,6 @@ import { useSkiAreasStore } from "../../SkiAreaStore";
 export const MyMountains: React.FC = () => (
   <View style={componentStyles.container}>
     <TitleBar />
-    <ScrollView>
-      <StatsHasSkied />
-      <SkiAreaList onlyHasSkied={true} />
-    </ScrollView>
+    <SkiAreaList onlyHasSkied={true} ListHeaderComponent={<StatsHasSkied />} />
   </View>
 );
