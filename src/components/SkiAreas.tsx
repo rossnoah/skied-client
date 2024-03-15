@@ -103,13 +103,15 @@ export const SkiAreaItem = React.memo(
             .skiAreas[skiArea.id]
       )
     );
-    const toggle = useSkiAreasStore.getState().toggleHasSkied;
+    const setHasSkied = useSkiAreasStore.getState().setHasSkied;
 
     const [opacity, setOpacity] = useState(1); // Default opacity is 1
 
     const toggleOnPressFunction = async () => {
       if (allowToggle) {
-        const newStatus = toggle(data);
+        const newStatus = !data.hasSkied;
+        setHasSkied(data, newStatus);
+        console.log("newStatus", newStatus);
         await AsyncStorage.setItem(data.id, newStatus.toString());
       }
     };
@@ -117,7 +119,9 @@ export const SkiAreaItem = React.memo(
     const toggleOnLongPressFunction = async () => {
       if (allowLongPress) {
         setOpacity(0.2); // Dim the opacity on long press
-        const newStatus = toggle(data);
+        const newStatus = !data.hasSkied;
+        setHasSkied(data, newStatus);
+        console.log("newStatus", newStatus);
         await AsyncStorage.setItem(data.id, newStatus.toString());
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       }

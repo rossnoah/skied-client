@@ -38,7 +38,7 @@ export interface SkiAreasStore {
   groupedSkiAreas: GroupedSkiAreas;
   idList: string[];
   addSkiArea: (skiArea: SkiArea) => void;
-  toggleHasSkied: (skiArea: SkiArea) => boolean;
+  setHasSkied: (skiArea: SkiArea, newHasSkiedValue: boolean) => void;
   clearHasSkied: () => void;
 }
 
@@ -76,8 +76,9 @@ export const useSkiAreasStore = create<SkiAreasStore>((set) => ({
       })
     );
   },
-  toggleHasSkied: (skiArea: SkiArea): boolean => {
+  setHasSkied: (skiArea: SkiArea, newHasSkiedValue: boolean): void => {
     const { country, state: stateName, id } = skiArea;
+
     set(
       produce((state: SkiAreasStore) => {
         ensureNestedStructure(state, country, stateName);
@@ -87,18 +88,23 @@ export const useSkiAreasStore = create<SkiAreasStore>((set) => ({
             id
           ];
         if (currentSkiArea) {
-          currentSkiArea.hasSkied = !currentSkiArea.hasSkied;
-          const increment = currentSkiArea.hasSkied ? 1 : -1;
-          state.groupedSkiAreas.countries[country].states[
-            stateName
-          ].totalHasSkied += increment;
-          state.groupedSkiAreas.countries[country].totalHasSkied += increment;
-          state.groupedSkiAreas.totalHasSkied += increment;
+          const oldHasSkiedValue = currentSkiArea.hasSkied;
+          currentSkiArea.hasSkied = newHasSkiedValue; // Explicitly set the new value
+
+          // Update the counters only if there's a change
+          if (oldHasSkiedValue !== newHasSkiedValue) {
+            const increment = newHasSkiedValue ? 1 : -1;
+            state.groupedSkiAreas.countries[country].states[
+              stateName
+            ].totalHasSkied += increment;
+            state.groupedSkiAreas.countries[country].totalHasSkied += increment;
+            state.groupedSkiAreas.totalHasSkied += increment;
+          }
         }
       })
     );
-    return skiArea.hasSkied;
   },
+
   clearHasSkied: (): void => {
     set(
       produce((state: SkiAreasStore) => {
